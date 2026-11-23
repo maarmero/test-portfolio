@@ -8,7 +8,7 @@ Manual and automated test cases for a portfolio rebalancing problem
 | File | Purpose |
 |------|---------|
 | `rebalancer.py` | Small reference implementation (the "application under test") |
-| `tests/test_rebalancer.py` | Automated pytest suite (40 tests) |
+| `tests/test_rebalancer.py` | Automated pytest suite (47 tests) |
 | `MANUAL_TEST_CASES.md` | Manual test cases with IDs, priority, expected results |
 
 ## Run
@@ -74,7 +74,7 @@ only exactly zero with fractional shares. Both cases are tested.
 
 - **Manual cases** (`MANUAL_TEST_CASES.md`) are the test design. A person runs them by hand the first time, or when something changes, and judges the result.
 - **Automated tests** (`tests/`) repeat the same checks quickly and the same way on every change. The "Automated?" column in the manual file points each manual case to its test.
-- **Manual only:** the screen checks (section E, because the assessment has no UI), TC-42 (huge account) and TC-44 (repeatability), plus the questions for the product owner. TC-39 and TC-43 are only partly automated.
+- **Manual only:** the screen checks (section E, because the assessment has no UI) and the questions for the product owner. Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
 - Most calculation, rounding and bad-input cases exist in both on purpose. In a real project the manual run would be a one-off and the automated test would stay as the regression check.
 
 ## Test approach

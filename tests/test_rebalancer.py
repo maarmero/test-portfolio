@@ -209,6 +209,28 @@ def test_whole_share_trades_leave_less_than_one_share_of_variance():
         assert abs(residual_dollars) < p.price, p.symbol
 
 
+# ---- extra checks ------------------------------------------------------------
+
+def test_huge_account_has_no_precision_loss():  # TC-42
+    result = rebalance(10**12, assessment_portfolio())
+    # 10% of 1,000,000,000,000 = 100,000,000,000; divided by the price, then rounded towards 0
+    assert result["IBM"] == 666_666_666
+    assert result["ORCL"] == -454_545_454
+    assert result["MSFT"] == result["AAPL"] == result["HD"] == 0
+
+
+def test_tiny_percentages_have_no_rounding_drift():  # TC-43
+    positions = [P("A", 0.01, 0.02, 1), P("B", 99.99, 99.98, 1)]
+    # 0.01% of 100,000 = $10 exactly, so exactly 10 shares at $1
+    assert rebalance(100_000, positions) == {"A": -10, "B": 10}
+
+
+def test_same_input_gives_same_result_every_time():  # TC-44
+    first = rebalance(100_000, assessment_portfolio())
+    for _ in range(10):
+        assert rebalance(100_000, assessment_portfolio()) == first
+
+
 # ---- invalid input -----------------------------------------------------------
 
 @pytest.mark.parametrize("total", [0, -1, "abc", None])
@@ -254,3 +276,14 @@ def test_duplicate_symbol():
 def test_empty_portfolio():
     with pytest.raises(RebalanceError):
         rebalance(100_000, [])
+
+
+@pytest.mark.parametrize("field", ["target_pct", "current_pct"])
+@pytest.mark.parametrize("empty", ["", None])
+def test_empty_percentage_names_the_field(field, empty):  # TC-39
+    values = {"target_pct": 20, "current_pct": 10}
+    values[field] = empty
+    positions = assessment_portfolio()
+    positions[0] = P("IBM", values["target_pct"], values["current_pct"], 150)
+    with pytest.raises(RebalanceError, match=f"IBM {field}"):
+        rebalance(100_000, positions)

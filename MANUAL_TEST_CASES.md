@@ -19,9 +19,9 @@ Priority: P1 = must pass, P2 = important, P3 = nice to have.
 
 **Automated?** column: the pytest test in `tests/test_rebalancer.py` that checks the same
 thing. These cases are the test design: do them by hand the first time or when something
-changes. The automated tests repeat the same checks quickly every time. "Manual only" means
-there is no automated test for it. Section E (screen checks) is manual only, because the
-assessment has no screen.
+changes. The automated tests repeat the same checks quickly every time. Sections A to D
+are all automated. Section E (screen checks) is manual only, because the assessment has
+no screen.
 
 ## A. Main calculation
 
@@ -67,7 +67,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 | TC-36 | Negative percentage | P2 | Want % is −10 | Error message | `test_negative_percentage` |
 | TC-37 | Same stock twice | P2 | IBM entered two times | Error message | `test_duplicate_symbol` |
 | TC-38 | No stocks | P2 | Submit with no stocks entered | Error message | `test_empty_portfolio` |
-| TC-39 | Empty field | P2 | Leave one Want % empty | Error message that says which field is empty | Partly: empty price or total in `test_invalid_price`, `test_invalid_total_assets` |
+| TC-39 | Empty field | P2 | Leave one Want % empty | Error message that says which field is empty | `test_empty_percentage_names_the_field` (also empty price or total in `test_invalid_price`, `test_invalid_total_assets`) |
 
 ## D. Extra checks
 
@@ -75,9 +75,9 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 |----|-------|-----|------------|--------------------|-----|
 | TC-40 | Order of rows | P2 | Run TC-01, then enter the same stocks in a different order | Each stock gets the same result as before | `test_input_order_does_not_change_result` |
 | TC-41 | Run it twice | P2 | Do the TC-01 trades, update the Have % to match, then run again | Each stock is at most 1 share away from done | `test_idempotent_after_applying_trades` |
-| TC-42 | Huge account | P3 | Account worth $1,000,000,000,000 | Correct results, no strange numbers | No, manual only |
-| TC-43 | Tiny percentages | P3 | Percentages with decimals, such as 0.01 | Correct results, no small rounding errors | Partly: `test_decimal_percentages_and_prices` |
-| TC-44 | Same answer every time | P2 | Run the same input 10 times | Same result every time | No, manual only |
+| TC-42 | Huge account | P3 | Account worth $1,000,000,000,000 | Correct results, no strange numbers | `test_huge_account_has_no_precision_loss` |
+| TC-43 | Tiny percentages | P3 | Percentages with decimals, such as 0.01 | Correct results, no small rounding errors | `test_tiny_percentages_have_no_rounding_drift`, `test_decimal_percentages_and_prices` |
+| TC-44 | Same answer every time | P2 | Run the same input 10 times | Same result every time | `test_same_input_gives_same_result_every_time` |
 
 ## E. Screen checks (only if the app had a screen)
 
