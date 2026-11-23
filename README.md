@@ -81,3 +81,13 @@ only exactly zero with fractional shares. Both cases are tested.
 
 - **Oracle:** expected values were calculated by hand from the formula, not by calling the code under test.
 - **Techniques:** the assessment scenario, equivalence classes (buy / sell / hold), boundary values (< 1 share, exact division, 0% and 100% targets), rounding rules, invalid input, and invariants (cash neutrality, no overshoot, order independence, idempotency).
+
+## How I would test the real application
+
+1. **Get the rules in writing first.** Agree the rounding rule, whether part shares are allowed, and what happens to leftover cash. Most wrong answers here would come from unclear rules, not from bad maths. The open questions are at the end of `MANUAL_TEST_CASES.md`.
+2. **Check the main answer first.** The assessment example (buy 66 IBM, sell 45 ORCL), then the buy / sell / nothing-to-do cases. If these are wrong, nothing else matters.
+3. **Then the risky areas.** Rounding (the number is almost never whole), money in versus money out, and very large or very small values.
+4. **Then bad input.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
+5. **Automate what repeats.** Calculation, rounding and bad-input checks run on every change. Keep manual testing for things a person has to judge, such as how a screen looks and whether an error message makes sense.
+
+**Not covered here:** fees, taxes, minimum trade sizes, real market prices, and how the numbers get into the app (a file, an API or a screen). I would ask about each before testing it.
