@@ -8,7 +8,7 @@ Manual and automated test cases for a portfolio rebalancing problem
 | File | Purpose |
 |------|---------|
 | `rebalancer.py` | Small reference implementation (the "application under test") |
-| `tests/` | Automated pytest suite (47 tests), one file per section of the manual cases: `test_main_calculation.py` (A), `test_rounding.py` (B), `test_bad_input.py` (C), `test_extra_checks.py` (D). `helpers.py` holds the shared setup |
+| `tests/` | Automated pytest suite (48 tests), one file per section of the manual cases: `test_main_calculation.py` (A), `test_rounding.py` (B), `test_bad_input.py` (C), `test_extra_checks.py` (D). `helpers.py` holds the shared setup |
 | `MANUAL_TEST_CASES.md` | Manual test cases with IDs, priority, expected results |
 
 ## Run

@@ -58,6 +58,13 @@ def test_total_bought_and_sold_with_several_buys_and_sells():  # TC-13 (b)
 
 # ---- buy, sell or do nothing -------------------------------------------------
 
+def test_one_to_buy_and_one_to_sell():  # TC-05
+    stocks = [stock("A", 30, 20, 150), stock("B", 70, 80, 1)]
+    # A: need $10,000 more, 10,000 / 150 = 66.67, rounds down to buy 66
+    # B: have $10,000 too much, 10,000 / 1 = sell 10,000
+    assert rebalance(100_000, stocks) == {"A": 66, "B": -10_000}
+
+
 @pytest.mark.parametrize(
     "target, current, expected",
     [

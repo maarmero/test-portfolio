@@ -32,7 +32,7 @@ no screen.
 | TC-02 | Money in equals money out | P1 | Take the TC-01 result and work out the money: shares bought × price, and shares sold × price | 66 × 150 = $9,900 spent on IBM; 45 × 220 = $9,900 received from ORCL; difference $0 | `test_assessment_example_money_in_equals_money_out` |
 | TC-03 | Part shares allowed | P2 | Run TC-01 with whole shares turned off | IBM +66.6667, ORCL −45.4545, the rest 0 | `test_assessment_example_with_part_shares` |
 | TC-04 | Nothing to change | P1 | Every stock has Current % equal to Target % | Every result is 0 | `test_nothing_to_change_gives_all_zeros` |
-| TC-05 | One to buy, one to sell | P1 | A: target 30, current 20, price 150. B: target 70, current 80, price 1 | A +66, B −10,000 | `test_buy_sell_or_nothing_depending_on_current_vs_target` |
+| TC-05 | One to buy, one to sell | P1 | A: target 30, current 20, price 150. B: target 70, current 80, price 1 | A +66, B −10,000 | `test_one_to_buy_and_one_to_sell` |
 | TC-06 | Buy or sell direction | P1 | Use one stock with Current % lower than Target %, and one with Current % higher | Current lower than Target gives a buy (+), Current higher than Target gives a sell (−) | `test_buy_sell_or_nothing_depending_on_current_vs_target` |
 | TC-07 | Only one stock | P3 | One stock, target 100, current 100 | 0 shares | `test_single_stock_gives_zero` |
 | TC-08 | Swap everything | P2 | A: target 0, current 100, price 100. B: target 100, current 0, price 50 | A −1000, B +2000 | `test_swap_everything` |
