@@ -5,16 +5,16 @@ from helpers import assessment_stocks, stock
 from rebalancer import RebalanceError, rebalance
 
 
-def test_want_percent_not_adding_up_to_100():  # TC-30
+def test_target_percent_not_adding_up_to_100():  # TC-30
     stocks = assessment_stocks()
-    stocks[0] = stock("IBM", 25, 10, 150)  # Want % now adds up to 105
+    stocks[0] = stock("IBM", 25, 10, 150)  # Target % now adds up to 105
     with pytest.raises(RebalanceError, match="target"):
         rebalance(100_000, stocks)
 
 
-def test_have_percent_not_adding_up_to_100():  # TC-31
+def test_current_percent_not_adding_up_to_100():  # TC-31
     stocks = assessment_stocks()
-    stocks[0] = stock("IBM", 20, 15, 150)  # Have % now adds up to 105
+    stocks[0] = stock("IBM", 20, 15, 150)  # Current % now adds up to 105
     with pytest.raises(RebalanceError, match="current"):
         rebalance(100_000, stocks)
 
@@ -50,7 +50,7 @@ def test_no_stocks():  # TC-38
         rebalance(100_000, [])
 
 
-@pytest.mark.parametrize("field", ["target_pct", "current_pct"])  # target = Want %, current = Have %
+@pytest.mark.parametrize("field", ["target_pct", "current_pct"])  # the code's names for Target % and Current %
 @pytest.mark.parametrize("empty_value", ["", None])
 def test_empty_percentage_names_the_field(field, empty_value):  # TC-39
     values = {"target_pct": 20, "current_pct": 10}

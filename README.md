@@ -38,12 +38,11 @@ On Windows cmd, use `.venv\Scripts\activate.bat` instead of the activate line.
 For each stock:
 
 ```
-money to trade = (Want % − Have %) / 100 × account value
+money to trade = (Target % − Current %) / 100 × account value
 shares         = money to trade / price of one share      (+ buy, − sell)
 ```
 
-"Want %" is the assessment's *target %*, and "Have %" is its *current %*. The assessment's
-*variance* is how far a stock is from what you want: Have % minus Want %. A negative
+*Variance* is how far a stock is from its target: Current % minus Target %. A negative
 variance means buy, a positive one means sell.
 
 Expected output for the assessment data:
@@ -60,9 +59,9 @@ The exact numbers are IBM +66.67 and ORCL −45.45. Rounded down they become 66 
 which is $9,900 spent on IBM and $9,900 received from ORCL, so the money spent equals
 the money received.
 
-**To get every stock to its Want % (zero variance):** buy 66 IBM and sell 45 ORCL. With whole
-shares, IBM and ORCL each end up $100 (0.1%) away from the Want %, which is less than
-the price of one share. They only land exactly on the Want % if part shares are allowed.
+**To get every stock to its Target % (zero variance):** buy 66 IBM and sell 45 ORCL. With whole
+shares, IBM and ORCL each end up $100 (0.1%) away from the Target %, which is less than
+the price of one share. They only land exactly on the Target % if part shares are allowed.
 Both cases are tested.
 
 ## Assumptions
@@ -72,7 +71,7 @@ Both cases are tested.
 3. Rounding is **down** (towards 0) for both buys and sells, so a trade never goes beyond what is needed and the account never spends more than it receives.
 4. The small amount of money left over after rounding is ignored.
 5. "100% is vested" means every holding can be sold.
-6. The Want % values must add up to exactly 100, and so must the Have % values. Otherwise the input is rejected.
+6. The Target % values must add up to exactly 100, and so must the Current % values. Otherwise the input is rejected.
 7. Prices are above 0 and the same for buying and selling. No fees, taxes or minimum trade size.
 8. Percentages are shares of the whole account value, counting all five stocks.
 9. The program uses exact decimal numbers, so there are no tiny rounding errors (for example with 0.01%).
@@ -93,6 +92,6 @@ Both cases are tested.
 4. **Then bad input.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
 5. **Automate what repeats.** Calculation, rounding and bad-input checks run on every change. Keep manual testing for things a person has to judge, such as how a screen looks and whether an error message makes sense.
 
-**How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, wanting 0% or 100%), rounding, and bad input. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
+**How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and bad input. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
 
 **Not covered here:** fees, taxes, minimum trade sizes, real market prices, and how the numbers get into the app (a file, an API or a screen). I would ask about each before testing it.

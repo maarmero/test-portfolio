@@ -15,14 +15,14 @@ def test_running_again_after_trading_needs_almost_nothing():  # TC-41
     stocks = assessment_stocks()
     trades = rebalance(100_000, stocks)
 
-    # Work out each stock's new Have % after doing the trades.
-    new_have = {
+    # Work out each stock's new Current % after doing the trades.
+    new_current = {
         s.symbol: (Decimal(s.current_pct) / 100 * 100_000 + trades[s.symbol] * s.price) / 1000
         for s in stocks
     }
-    # A little money is left over from rounding, so scale the Have % back up to add to 100.
-    scale = 100 / sum(new_have.values())
-    after_trading = [stock(s.symbol, s.target_pct, new_have[s.symbol] * scale, s.price) for s in stocks]
+    # A little money is left over from rounding, so scale the Current % back up to add to 100.
+    scale = 100 / sum(new_current.values())
+    after_trading = [stock(s.symbol, s.target_pct, new_current[s.symbol] * scale, s.price) for s in stocks]
 
     second_run = rebalance(100_000, after_trading)
     assert all(abs(shares) <= 1 for shares in second_run.values())

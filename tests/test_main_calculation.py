@@ -59,15 +59,15 @@ def test_total_bought_and_sold_with_several_buys_and_sells():  # TC-13 (b)
 # ---- buy, sell or do nothing -------------------------------------------------
 
 @pytest.mark.parametrize(
-    "want, have, expected",
+    "target, current, expected",
     [
-        (30, 20, 66),    # have less than we want: buy ($10,000 / $150 = 66.67)
-        (20, 30, -66),   # have more than we want: sell
-        (20, 20, 0),     # have exactly what we want: do nothing
+        (30, 20, 66),    # current below target: buy ($10,000 / $150 = 66.67)
+        (20, 30, -66),   # current above target: sell
+        (20, 20, 0),     # current equals target: do nothing
     ],
 )
-def test_buy_sell_or_nothing_depending_on_have_vs_want(want, have, expected):  # TC-05, TC-06
-    stocks = [stock("A", want, have, 150), stock("B", 100 - want, 100 - have, 1)]
+def test_buy_sell_or_nothing_depending_on_current_vs_target(target, current, expected):  # TC-05, TC-06
+    stocks = [stock("A", target, current, 150), stock("B", 100 - target, 100 - current, 1)]
     assert rebalance(100_000, stocks)["A"] == expected
 
 
@@ -87,7 +87,7 @@ def test_swap_everything():  # TC-08
     assert rebalance(100_000, stocks) == {"A": -1000, "B": 2000}
 
 
-def test_want_zero_percent_sells_the_whole_holding():  # TC-09
+def test_target_zero_percent_sells_the_whole_holding():  # TC-09
     stocks = [stock("A", 0, 25, 100), stock("B", 100, 75, 100)]
     assert rebalance(100_000, stocks) == {"A": -250, "B": 250}
 

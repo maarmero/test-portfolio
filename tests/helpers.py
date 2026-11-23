@@ -1,8 +1,8 @@
 """Shared setup for the tests.
 
 Words used in the tests:
-  want  = the share of the account you want in a stock (called target_pct in the code)
-  have  = the share of the account that is in the stock now (called current_pct in the code)
+  Target % = the share of the account you want in a stock (target_pct in the code)
+  Current % = the share of the account that is in the stock now (current_pct in the code)
   A result of +66 means buy 66 shares, -45 means sell 45 shares, 0 means do nothing.
 """
 from decimal import Decimal
@@ -10,9 +10,9 @@ from decimal import Decimal
 from rebalancer import Position
 
 
-def stock(symbol, want, have, price):
-    """One stock: its name, Want %, Have % and the price of one share."""
-    return Position(symbol, want, have, price)
+def stock(symbol, target, current, price):
+    """One stock: its name, Target %, Current % and the price of one share."""
+    return Position(symbol, target, current, price)
 
 
 def assessment_stocks():
@@ -40,14 +40,14 @@ def total_bought_and_sold(result):
 
 
 def distance_from_target_after_trades(stocks, trades, account_value=100_000):
-    """After doing the trades, how far is each stock from what we want?
+    """After doing the trades, how far is each stock from its target?
 
     Returns {symbol: (percentage points off, dollars off)}. 0 means exactly on target.
     """
     out = {}
     for s in stocks:
         value_now = Decimal(s.current_pct) / 100 * account_value + trades[s.symbol] * s.price
-        value_wanted = Decimal(s.target_pct) / 100 * account_value
-        dollars_off = value_now - value_wanted
+        value_at_target = Decimal(s.target_pct) / 100 * account_value
+        dollars_off = value_now - value_at_target
         out[s.symbol] = (dollars_off / account_value * 100, dollars_off)
     return out
