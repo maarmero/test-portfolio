@@ -13,11 +13,25 @@ Manual and automated test cases for a portfolio rebalancing problem
 
 ## Run
 
+Requires Python 3.9+.
+
+macOS / Linux:
+
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 pytest -v
 ```
+
+Windows (PowerShell):
+
+```powershell
+py -m venv .venv; .venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+pytest -v
+```
+
+On Windows cmd, use `.venv\Scripts\activate.bat` instead of the activate line.
 
 ## The logic
 
