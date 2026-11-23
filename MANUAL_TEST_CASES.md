@@ -21,6 +21,7 @@ Priority: P1 = must pass before release, P2 = important, P3 = nice to have.
 | TC-10 | Different account size | P2 | TC-01 with total assets $1,000,000 | IBM +666, ORCL −454 |
 | TC-11 | Non-round total | P3 | Total $12,345.67; A 50/40 @10; B 50/60 @10 | A +123, B −123 |
 | TC-12 | Many securities | P3 | 10 securities, all 10% / 10% | All 0 |
+| TC-13 | Total shares bought and sold | P1 | (a) Run TC-01 and add up the positive and the negative outputs. (b) Run A 40/30 @100, B 30/20 @50, C 10/25 @200, D 20/25 @100 | (a) Total bought 66, total sold 45. (b) A +100, B +200, C −75, D −50; total bought 300, total sold 125 |
 
 ## B. Rounding
 

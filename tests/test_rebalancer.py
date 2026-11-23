@@ -157,6 +157,30 @@ def test_idempotent_after_applying_trades():
     assert all(abs(v) <= 1 for v in again.values())
 
 
+# ---- totals of shares to buy and to sell -------------------------------------
+
+def totals(result):
+    bought = sum(v for v in result.values() if v > 0)
+    sold = -sum(v for v in result.values() if v < 0)
+    return bought, sold
+
+
+def test_assessment_total_shares_bought_and_sold():
+    assert totals(rebalance(100_000, assessment_portfolio())) == (66, 45)
+
+
+def test_total_shares_with_several_buys_and_sells():
+    positions = [
+        P("A", 40, 30, 100),  # +10,000 / 100 = +100
+        P("B", 30, 20, 50),   # +10,000 / 50  = +200
+        P("C", 10, 25, 200),  # -15,000 / 200 = -75
+        P("D", 20, 25, 100),  # -5,000 / 100  = -50
+    ]
+    result = rebalance(100_000, positions)
+    assert result == {"A": 100, "B": 200, "C": -75, "D": -50}
+    assert totals(result) == (300, 125)
+
+
 # ---- the yellow question: zero target variance after trading ----------------
 
 def variance_after_trades(positions, trades, total=100_000):
