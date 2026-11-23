@@ -50,7 +50,7 @@ $9,900 bought and $9,900 sold, so the trade is cash-neutral.
 7. Prices are positive and the same for buy and sell. No fees, taxes, lots or minimum trade size.
 8. Percentages are relative to total assets of the account, including all five positions.
 9. `Decimal` arithmetic is used to avoid floating-point errors.
-10. No UI exists in the assessment, so there are no UI tests.
+10. No UI exists in the assessment, so there are no automated UI tests. `MANUAL_TEST_CASES.md` section E has a few hypothetical UI-style manual cases.
 
 ## Test approach
 

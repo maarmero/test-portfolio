@@ -57,7 +57,26 @@ Priority: P1 = must pass before release, P2 = important, P3 = nice to have.
 | TC-43 | Very small percentages (0.01) | P3 | Correct, no float rounding drift (decimal arithmetic) |
 | TC-44 | Repeatability | P2 | Same input 10× → identical output |
 
-## E. Questions for the product owner (open assumptions)
+## E. UI-style cases (hypothetical)
+
+The assessment describes no screen. These apply if the rebalancer were exposed
+through a form with an input grid and an output column ("Number of shares to buy/sell").
+
+| ID | Title | Pri | Steps | Expected result |
+|----|-------|-----|-------|-----------------|
+| TC-50 | Output column labelling | P2 | Run TC-01 in the UI | Buys and sells are clearly distinguishable (sign and/or "Buy"/"Sell" label); zero rows show 0 or "—", not blank |
+| TC-51 | Number formatting | P2 | Use total $1,000,000 and prices with cents | Thousands separators and 2-decimal prices display correctly; shares shown as whole numbers |
+| TC-52 | Inline validation | P1 | Enter target % that sum to 105 | Error shown next to the field or total, Calculate disabled or blocked, entered data kept |
+| TC-53 | Required fields | P2 | Leave a price empty and submit | Field highlighted with a message naming it; no partial results shown |
+| TC-54 | Non-numeric / special input | P2 | Type "abc", "1e3", "-5", "1,5" into numeric fields | Rejected or normalised consistently, with no crash or NaN shown |
+| TC-55 | Recalculate on edit | P1 | Run TC-01, change IBM current % to 20, recalculate | Output updates; no stale values from the previous run |
+| TC-56 | Add / remove security row | P2 | Add a sixth row, then delete one | Totals and output update; deleted symbol no longer appears in results |
+| TC-57 | Reset / clear | P3 | Click Reset after a run | Inputs and outputs cleared, or restored to defaults |
+| TC-58 | Keyboard use | P3 | Complete TC-01 with Tab, Enter and no mouse | Logical tab order; Enter submits; focus visible |
+| TC-59 | Responsive layout | P3 | Open at desktop and phone width | Grid stays readable (scroll or stack); output column not cut off |
+| TC-60 | Double submit | P3 | Click Calculate twice quickly | Single consistent result, no duplicated rows |
+
+## F. Questions for the product owner (open assumptions)
 
 1. Are fractional shares allowed for any security?
 2. Is rounding toward zero acceptable, or should it be round-to-nearest?
