@@ -35,10 +35,16 @@ On Windows cmd, use `.venv\Scripts\activate.bat` instead of the activate line.
 
 ## The logic
 
+For each stock:
+
 ```
-trade value = (target% − current%) / 100 × total assets
-shares      = trade value / unit price      (+ buy, − sell)
+money to trade = (Want % − Have %) / 100 × account value
+shares         = money to trade / price of one share      (+ buy, − sell)
 ```
+
+"Want %" is the assessment's *target %*, and "Have %" is its *current %*. The assessment's
+*variance* is how far a stock is from what you want: Have % minus Want %. A negative
+variance means buy, a positive one means sell.
 
 Expected output for the assessment data:
 
@@ -50,24 +56,26 @@ Expected output for the assessment data:
 | AAPL | 20 | 20 |   0 | 450 | 0 |
 | HD   | 20 | 20 |   0 |  70 | 0 |
 
-Exact values are IBM +66.67 and ORCL −45.45; rounded toward zero they give
-$9,900 bought and $9,900 sold, so the trade is cash-neutral.
+The exact numbers are IBM +66.67 and ORCL −45.45. Rounded down they become 66 and 45,
+which is $9,900 spent on IBM and $9,900 received from ORCL, so the money spent equals
+the money received.
 
-**To reach zero target variance:** buy 66 IBM and sell 45 ORCL. With whole shares
-IBM and ORCL end up $100 away from target (0.1%), less than one share, so variance is
-only exactly zero with fractional shares. Both cases are tested.
+**To get every stock to its Want % (zero variance):** buy 66 IBM and sell 45 ORCL. With whole
+shares, IBM and ORCL each end up $100 (0.1%) away from the Want %, which is less than
+the price of one share. They only land exactly on the Want % if part shares are allowed.
+Both cases are tested.
 
 ## Assumptions
 
-1. No application code was provided, so `rebalancer.py` stands in for it. The tests target its `rebalance()` contract, not its internals.
-2. Whole shares only by default; fractional mode is available for comparison.
-3. Rounding is **toward zero** for both buys and sells, so a trade never overshoots the target and the account never spends more than it raises.
-4. Leftover cash from rounding is ignored (no reinvestment).
+1. No application code was provided, so `rebalancer.py` is a simple program I wrote to take its place. The tests only look at what `rebalance()` returns, not how it works inside.
+2. Whole shares only by default. Part shares can be turned on for comparison.
+3. Rounding is **down** (towards 0) for both buys and sells, so a trade never goes beyond what is needed and the account never spends more than it receives.
+4. The small amount of money left over after rounding is ignored.
 5. "100% is vested" means every holding can be sold.
-6. Target % and current % must each sum to exactly 100; otherwise the input is rejected.
-7. Prices are positive and the same for buy and sell. No fees, taxes, lots or minimum trade size.
-8. Percentages are relative to total assets of the account, including all five positions.
-9. `Decimal` arithmetic is used to avoid floating-point errors.
+6. The Want % values must add up to exactly 100, and so must the Have % values. Otherwise the input is rejected.
+7. Prices are above 0 and the same for buying and selling. No fees, taxes or minimum trade size.
+8. Percentages are shares of the whole account value, counting all five stocks.
+9. The program uses exact decimal numbers, so there are no tiny rounding errors (for example with 0.01%).
 10. No UI exists in the assessment, so there are no automated UI tests. `MANUAL_TEST_CASES.md` section E has a few hypothetical UI-style manual cases.
 
 ## Manual vs automated
@@ -75,7 +83,7 @@ only exactly zero with fractional shares. Both cases are tested.
 - **Manual cases** (`MANUAL_TEST_CASES.md`) are the test design. A person runs them by hand the first time, or when something changes, and judges the result.
 - **Automated tests** (`tests/`) repeat the same checks quickly and the same way on every change. The "Automated?" column in the manual file points each manual case to its test.
 - **Manual only:** the screen checks (section E, because the assessment has no UI) and the questions for the product owner. Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
-- Most calculation, rounding and bad-input cases exist in both on purpose. In a real project the manual run would be a one-off and the automated test would stay as the regression check.
+- Most calculation, rounding and bad-input cases exist in both on purpose. In a real project the manual run would be a one-off and the automated test would stay, to catch anything that breaks later.
 
 ## How I would test the real application
 
