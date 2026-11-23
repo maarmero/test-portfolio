@@ -1,83 +1,63 @@
-"""Reference implementation of the portfolio rebalancer under test.
+"""The program being tested: works out how many shares to buy or sell.
 
-Positive result = BUY shares, negative = SELL shares, 0 = no trade.
-See README.md for the assumptions behind the rounding rule.
+Result: + means buy, - means sell, 0 means do nothing.
 """
-from dataclasses import dataclass
+from collections import namedtuple
 from decimal import Decimal, ROUND_DOWN
-from typing import Dict, Iterable, Union
 
-Number = Union[int, float, str, Decimal]
+# One stock: its name, Target %, Current % and the price of one share.
+Position = namedtuple("Position", "symbol target_pct current_pct price")
 
 
 class RebalanceError(ValueError):
-    """Raised when the input portfolio is invalid."""
+    """The input is wrong (for example, the percentages do not add up to 100)."""
 
 
-@dataclass(frozen=True)
-class Position:
-    symbol: str
-    target_pct: Number
-    current_pct: Number
-    price: Number
-
-
-def _dec(value: Number, field: str) -> Decimal:
+def to_number(value, name):
+    """Turn the input into an exact decimal number, or raise an error."""
     try:
         return Decimal(str(value))
-    except Exception as exc:
-        raise RebalanceError(f"{field} is not a number: {value!r}") from exc
+    except Exception:
+        raise RebalanceError(f"{name} is not a number: {value!r}")
 
 
-def rebalance(
-    total_assets: Number,
-    positions: Iterable[Position],
-    whole_shares: bool = True,
-) -> Dict[str, Decimal]:
-    """Return shares to trade per symbol to reach zero target variance.
-
-    whole_shares=True rounds toward zero (never overshoots the target).
-    whole_shares=False returns exact fractional shares.
-    """
-    positions = list(positions)
-    total = _dec(total_assets, "total_assets")
-    if total <= 0:
-        raise RebalanceError("total_assets must be > 0")
-    if not positions:
-        raise RebalanceError("at least one position is required")
-
-    symbols = [p.symbol for p in positions]
-    if len(set(symbols)) != len(symbols):
+def rebalance(account_value, stocks, whole_shares=True):
+    account_value = to_number(account_value, "account value")
+    if account_value <= 0:
+        raise RebalanceError("account value must be > 0")
+    if not stocks:
+        raise RebalanceError("at least one stock is required")
+    names = [s.symbol for s in stocks]
+    if len(set(names)) != len(names):
         raise RebalanceError("duplicate symbol")
 
-    target_sum = Decimal(0)
-    current_sum = Decimal(0)
-    parsed = []
-    for p in positions:
-        target = _dec(p.target_pct, f"{p.symbol} target_pct")
-        current = _dec(p.current_pct, f"{p.symbol} current_pct")
-        price = _dec(p.price, f"{p.symbol} price")
+    total_target = 0
+    total_current = 0
+    result = {}
+    for s in stocks:
+        target = to_number(s.target_pct, f"{s.symbol} target_pct")
+        current = to_number(s.current_pct, f"{s.symbol} current_pct")
+        price = to_number(s.price, f"{s.symbol} price")
         if price <= 0:
-            raise RebalanceError(f"{p.symbol} price must be > 0")
+            raise RebalanceError(f"{s.symbol} price must be > 0")
         if target < 0 or current < 0:
-            raise RebalanceError(f"{p.symbol} percentages must be >= 0")
-        target_sum += target
-        current_sum += current
-        parsed.append((p.symbol, target, current, price))
+            raise RebalanceError(f"{s.symbol} percentages must be >= 0")
+        total_target += target
+        total_current += current
 
-    if target_sum != 100:
-        raise RebalanceError(f"target % must sum to 100, got {target_sum}")
-    if current_sum != 100:
-        raise RebalanceError(f"current % must sum to 100, got {current_sum}")
-
-    result: Dict[str, Decimal] = {}
-    for symbol, target, current, price in parsed:
-        # variance = current - target; negative -> buy, positive -> sell
-        trade_value = (target - current) / 100 * total
-        shares = trade_value / price
+        # 1. How much money do we need to buy (+) or sell (-)?
+        money_to_trade = (target - current) / 100 * account_value
+        # 2. How many shares is that?
+        shares = money_to_trade / price
+        # 3. Round down towards 0 (whole shares), or keep 4 decimals (part shares).
         if whole_shares:
-            shares = shares.quantize(Decimal(1), rounding=ROUND_DOWN)  # toward zero
+            shares = shares.quantize(Decimal(1), rounding=ROUND_DOWN)
         else:
             shares = shares.quantize(Decimal("0.0001"))
-        result[symbol] = shares + 0  # normalises -0 to 0
+        result[s.symbol] = shares
+
+    if total_target != 100:
+        raise RebalanceError(f"target % must sum to 100, got {total_target}")
+    if total_current != 100:
+        raise RebalanceError(f"current % must sum to 100, got {total_current}")
     return result
