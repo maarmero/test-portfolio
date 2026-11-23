@@ -70,6 +70,13 @@ only exactly zero with fractional shares. Both cases are tested.
 9. `Decimal` arithmetic is used to avoid floating-point errors.
 10. No UI exists in the assessment, so there are no automated UI tests. `MANUAL_TEST_CASES.md` section E has a few hypothetical UI-style manual cases.
 
+## Manual vs automated
+
+- **Manual cases** (`MANUAL_TEST_CASES.md`) are the test design. A person runs them by hand the first time, or when something changes, and judges the result.
+- **Automated tests** (`tests/`) repeat the same checks quickly and the same way on every change. The "Automated?" column in the manual file points each manual case to its test.
+- **Manual only:** the screen checks (section E, because the assessment has no UI), TC-42 (huge account) and TC-44 (repeatability), plus the questions for the product owner. TC-39 and TC-43 are only partly automated.
+- Most calculation, rounding and bad-input cases exist in both on purpose. In a real project the manual run would be a one-off and the automated test would stay as the regression check.
+
 ## Test approach
 
 - **Oracle:** expected values were calculated by hand from the formula, not by calling the code under test.
