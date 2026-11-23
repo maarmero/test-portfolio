@@ -8,7 +8,7 @@ Manual and automated test cases for a portfolio rebalancing problem
 | File | Purpose |
 |------|---------|
 | `rebalancer.py` | Small reference implementation (the "application under test") |
-| `tests/test_rebalancer.py` | Automated pytest suite (36 tests) |
+| `tests/test_rebalancer.py` | Automated pytest suite (38 tests) |
 | `MANUAL_TEST_CASES.md` | Manual test cases with IDs, priority, expected results |
 
 ## Run
@@ -38,6 +38,10 @@ Expected output for the assessment data:
 
 Exact values are IBM +66.67 and ORCL −45.45; rounded toward zero they give
 $9,900 bought and $9,900 sold, so the trade is cash-neutral.
+
+**To reach zero target variance:** buy 66 IBM and sell 45 ORCL. With whole shares
+IBM and ORCL end up $100 away from target (0.1%), less than one share, so variance is
+only exactly zero with fractional shares. Both cases are tested.
 
 ## Assumptions
 

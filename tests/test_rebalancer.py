@@ -157,6 +157,34 @@ def test_idempotent_after_applying_trades():
     assert all(abs(v) <= 1 for v in again.values())
 
 
+# ---- the yellow question: zero target variance after trading ----------------
+
+def variance_after_trades(positions, trades, total=100_000):
+    """Return {symbol: (variance in % points, residual dollars vs target)}."""
+    out = {}
+    for p in positions:
+        value = Decimal(p.current_pct) / 100 * total + trades[p.symbol] * p.price
+        target_value = Decimal(p.target_pct) / 100 * total
+        out[p.symbol] = ((value - target_value) / total * 100, value - target_value)
+    return out
+
+
+def test_fractional_trades_reach_zero_variance():
+    positions = assessment_portfolio()
+    trades = rebalance(100_000, positions, whole_shares=False)
+    for symbol, (variance, _) in variance_after_trades(positions, trades).items():
+        # 4-decimal share rounding leaves at most ~0.00001 percentage points
+        assert abs(variance) < Decimal("0.001"), symbol
+
+
+def test_whole_share_trades_leave_less_than_one_share_of_variance():
+    positions = assessment_portfolio()
+    trades = rebalance(100_000, positions)
+    for p in positions:
+        _, residual_dollars = variance_after_trades(positions, trades)[p.symbol]
+        assert abs(residual_dollars) < p.price, p.symbol
+
+
 # ---- invalid input -----------------------------------------------------------
 
 @pytest.mark.parametrize("total", [0, -1, "abc", None])
