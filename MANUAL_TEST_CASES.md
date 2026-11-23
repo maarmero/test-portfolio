@@ -37,13 +37,16 @@ Priority: P1 = must pass, P2 = important, P3 = nice to have.
 
 ## B. Rounding
 
+Each case uses two stocks so that the Want % and the Have % each add up to 100.
+Stock B is only a filler to make that work; check the result for stock A. The account is $100,000.
+
 | ID | Title | Pri | What to do | What should happen |
 |----|-------|-----|------------|--------------------|
-| TC-20 | Buying: round down | P1 | Need to buy $10,000 of a stock priced $150 (that is 66.67 shares) | +66, not 67 |
-| TC-21 | Selling: round down | P1 | Need to sell $10,000 of a stock priced $150 | −66, not −67 |
-| TC-22 | Less than one share | P1 | Need to buy $10,000 of a stock priced $20,000 | 0 shares |
-| TC-23 | Divides evenly | P2 | Need to buy $10,000 of a stock priced $100 | +100 |
-| TC-24 | Never trade too much | P1 | Try any example | For every stock, the money value of the shares traded is never more than the money value needed |
+| TC-20 | Buying: round down | P1 | A: want 20, have 10, price 150 (needs $10,000 more, which is 66.67 shares). B (filler): want 80, have 90, price 1 | A +66, not 67 |
+| TC-21 | Selling: round down | P1 | A: want 10, have 20, price 150 (needs $10,000 less, which is 66.67 shares). B (filler): want 90, have 80, price 1 | A −66, not −67 |
+| TC-22 | Less than one share | P1 | A: want 20, have 10, price 20,000 (needs $10,000 more, which is 0.5 of a share). B (filler): want 80, have 90, price 1 | A 0 shares |
+| TC-23 | Divides evenly | P2 | A: want 20, have 10, price 100 (needs $10,000 more, which is exactly 100 shares). B (filler): want 80, have 90, price 1 | A +100 |
+| TC-24 | Never trade too much | P1 | Run any example above, or TC-01 | For every stock, the money value of the shares traded (shares × price) is never more than the money value needed |
 
 ## C. Bad input (the app should reject mistakes)
 
