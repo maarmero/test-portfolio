@@ -1,4 +1,4 @@
-"""Section D of TEST_PLAN.md: extra checks (order of rows, very big and very small numbers)."""
+"""Section D of TEST_PLAN.md: robustness (order of rows, running again after trading, decimal inputs)."""
 from decimal import Decimal
 
 import pytest
@@ -15,7 +15,7 @@ def test_order_of_rows_does_not_matter():  # TC-40
 
 
 @pytest.mark.p2
-def test_running_again_after_trading_needs_almost_nothing():  # TC-41
+def test_second_run_after_trading_is_within_one_share():  # TC-41
     stocks = assessment_stocks()
     trades = rebalance(100_000, stocks)
 
@@ -40,7 +40,7 @@ def test_tiny_percentages_are_exact():  # TC-43
 
 
 @pytest.mark.p3
-def test_percentages_and_prices_with_decimals():  # TC-43
+def test_decimal_inputs_are_used_exactly():  # TC-43
     stocks = [stock("A", "33.33", "33.30", "10.50"), stock("B", "66.67", "66.70", "20.25")]
     # A needs 0.03% = $30 more: 30 / 10.50 = 2.86, so buy 2.  B has $30 too much: 30 / 20.25 = 1.48, so sell 1.
     # With the decimals cut off, A would be 3 (30 / 10), so this checks the decimals are used.

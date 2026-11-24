@@ -18,7 +18,7 @@ to buy or sell so the account matches the mix you want.
 
 Priority: P1 = must pass, P2 = important, P3 = nice to have.
 
-**Automated?** column: the pytest test (in the `tests/` folder: `test_main_calculation.py`, `test_rounding.py`, `test_input_validation.py`, `test_extra_checks.py`) that checks the same
+**Automated?** column: the pytest test (in the `tests/` folder: `test_main_calculation.py`, `test_rounding.py`, `test_input_validation.py`, `test_robustness.py`) that checks the same
 behaviour. Sections A to D
 are all automated. Section E (screen checks) is manual only, because the assessment has
 no screen.
@@ -70,14 +70,14 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 | TC-38 | No stocks | P2 | Submit with no stocks entered | Error message | `test_no_stocks` |
 | TC-39 | Empty field | P2 | Leave one Target % empty | Error message that says which field is empty | `test_empty_percentage_names_the_field` (also an empty price or account value in `test_invalid_price`, `test_invalid_account_value`) |
 
-## D. Extra checks
+## D. Robustness
 
 | ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-40 | Order of rows | P2 | Run TC-01, then enter the same stocks in a different order | Each stock gets the same result as before | `test_order_of_rows_does_not_matter` |
-| TC-41 | Run it twice | P2 | Do the TC-01 trades, update the Current % to match, then run again | Each stock is at most 1 share away from done | `test_running_again_after_trading_needs_almost_nothing` |
+| TC-41 | Run it twice | P2 | Do the TC-01 trades, update the Current % to match, then run again | Each stock is at most 1 share away from done | `test_second_run_after_trading_is_within_one_share` |
 | TC-42 | Huge account | P3 | Account worth $1,000,000,000,000 | Correct results, no strange numbers | `test_large_account_values` |
-| TC-43 | Tiny percentages | P3 | Percentages with decimals, such as 0.01 | Correct results, no small rounding errors | `test_tiny_percentages_are_exact`, `test_percentages_and_prices_with_decimals` |
+| TC-43 | Tiny percentages | P3 | Percentages with decimals, such as 0.01 | Correct results, no small rounding errors | `test_tiny_percentages_are_exact`, `test_decimal_inputs_are_used_exactly` |
 
 ## E. Screen checks (only if the app had a screen)
 
