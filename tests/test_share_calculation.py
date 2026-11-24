@@ -1,4 +1,4 @@
-"""Section A of TEST_PLAN.md: the main calculation (how many shares to buy or sell)."""
+"""Section A of TEST_PLAN.md: share calculation (how many shares to buy or sell)."""
 from decimal import Decimal
 
 import pytest

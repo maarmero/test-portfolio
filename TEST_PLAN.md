@@ -18,12 +18,12 @@ to buy or sell so the account matches the mix you want.
 
 Priority: P1 = must pass, P2 = important, P3 = nice to have.
 
-**Automated?** column: the pytest test (in the `tests/` folder: `test_main_calculation.py`, `test_rounding.py`, `test_input_validation.py`, `test_robustness.py`) that checks the same
+**Automated?** column: the pytest test (in the `tests/` folder: `test_share_calculation.py`, `test_rounding.py`, `test_input_validation.py`, `test_robustness.py`) that checks the same
 behaviour. Sections A to D
 are all automated. Section E (screen checks) is manual only, because the assessment has
 no screen.
 
-## A. Main calculation
+## A. Share calculation
 
 | ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|

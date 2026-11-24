@@ -10,7 +10,7 @@ Manual and automated test cases for a portfolio rebalancing problem
 | File | Purpose |
 |------|---------|
 | `rebalancer.py` | Small reference implementation (the "application under test") |
-| `tests/` | Automated pytest suite, grouped by section of `TEST_PLAN.md`: `test_main_calculation.py` (A), `test_rounding.py` (B), `test_input_validation.py` (C), `test_robustness.py` (D). `helpers.py` holds the shared setup |
+| `tests/` | Automated pytest suite, grouped by section of `TEST_PLAN.md`: `test_share_calculation.py` (A), `test_rounding.py` (B), `test_input_validation.py` (C), `test_robustness.py` (D). `helpers.py` holds the shared setup |
 | `TEST_PLAN.md` | test cases with IDs, priority, expected results and automation coverage |
 
 ## Run
