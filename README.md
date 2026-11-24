@@ -97,7 +97,7 @@ Both cases are tested.
 2. **Check the main answer first.** The assessment example (buy 66 IBM, sell 45 ORCL), then the buy / sell / nothing-to-do cases. If these are wrong, nothing else matters.
 3. **Then the risky areas.** Rounding (the number is almost never whole), money in versus money out, and very large or very small values.
 4. **Then bad input.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
-5. **Automate what repeats.** Calculation, rounding and bad-input checks run on every change. Keep manual testing for things a person has to judge, such as how a screen looks and whether an error message makes sense.
+5. **Automate what repeats.** Calculation, rounding and bad-input checks are added onto the automated suite which runs on every PR merge.
 
 **How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and bad input. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
 
