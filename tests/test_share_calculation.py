@@ -77,17 +77,18 @@ def test_target_zero_percent_sells_the_whole_holding(stocks, expected):  # TC-08
 
 
 @pytest.mark.parametrize(
-    "account_value, ibm, orcl",
+    "account_value, expected",
     [
-        (1_000_000, 666, -454),                # TC-10
-        (10**12, 666_666_666, -454_545_454),   # TC-42: $1,000,000,000,000. 10% is $100,000,000,000, divided by the price
+        # TC-10
+        (1_000_000, {"IBM": 666, "MSFT": 0, "ORCL": -454, "AAPL": 0, "HD": 0}),
+        # TC-42: $1,000,000,000,000. 10% is $100,000,000,000, divided by the price
+        (10**12, {"IBM": 666_666_666, "MSFT": 0, "ORCL": -454_545_454, "AAPL": 0, "HD": 0}),
     ],
+    ids=["one_million", "one_trillion"],
 )
 @pytest.mark.p2
-def test_large_account_values(account_value, ibm, orcl):  # TC-10, TC-42
-    result = rebalance(account_value, assessment_stocks())
-    assert result["IBM"] == ibm and result["ORCL"] == orcl
-    assert result["MSFT"] == result["AAPL"] == result["HD"] == 0
+def test_large_account_values(account_value, expected):  # TC-10, TC-42
+    assert rebalance(account_value, assessment_stocks()) == expected
 
 
 @pytest.mark.p3
