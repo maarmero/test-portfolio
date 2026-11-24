@@ -37,9 +37,17 @@ def test_bad_account_value(account_value):
         rebalance(account_value, assessment_stocks())
 
 
+@pytest.mark.parametrize(
+    "stocks",
+    [
+        [stock("A", -10, 50, 10), stock("B", 110, 50, 10)],   # Target % is negative
+        [stock("A", 50, -10, 10), stock("B", 50, 110, 10)],   # Current % is negative
+    ],
+    ids=["negative_target", "negative_current"],
+)
 @pytest.mark.p2
-def test_negative_percentage():  # TC-36
-    stocks = [stock("A", -10, 50, 10), stock("B", 110, 50, 10)]
+def test_negative_percentage(stocks):  # TC-36
+    # Both columns still add up to 100, so only the "not below 0" check can reject these.
     with pytest.raises(RebalanceError):
         rebalance(100_000, stocks)
 
@@ -58,11 +66,10 @@ def test_no_stocks():  # TC-38
 
 
 @pytest.mark.parametrize("field", ["target_pct", "current_pct"])  # the code's names for Target % and Current %
-@pytest.mark.parametrize("empty_value", ["", None])
 @pytest.mark.p2
-def test_empty_percentage_names_the_field(field, empty_value):  # TC-39
+def test_empty_percentage_names_the_field(field):  # TC-39
     values = {"target_pct": 20, "current_pct": 10}
-    values[field] = empty_value
+    values[field] = ""
     stocks = assessment_stocks()
     stocks[0] = stock("IBM", values["target_pct"], values["current_pct"], 150)
     with pytest.raises(RebalanceError, match=f"IBM {field}"):

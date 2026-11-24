@@ -65,7 +65,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 | TC-33 | Negative price | P1 | Price is −5 | Error message | `test_bad_price` |
 | TC-34 | Price is text | P2 | Price is "abc" | Error message | `test_bad_price` |
 | TC-35 | Account value of 0 or less | P1 | Account value 0, then −1 | Error message each time | `test_bad_account_value` |
-| TC-36 | Negative percentage | P2 | Target % is −10 | Error message | `test_negative_percentage` |
+| TC-36 | Negative percentage | P2 | Target % is −10, then (separately) Current % is −10 | Error message | `test_negative_percentage` |
 | TC-37 | Same stock twice | P2 | IBM entered two times | Error message | `test_same_stock_twice` |
 | TC-38 | No stocks | P2 | Submit with no stocks entered | Error message | `test_no_stocks` |
 | TC-39 | Empty field | P2 | Leave one Target % empty | Error message that says which field is empty | `test_empty_percentage_names_the_field` (also an empty price or account value in `test_bad_price`, `test_bad_account_value`) |
