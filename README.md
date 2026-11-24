@@ -86,10 +86,10 @@ Both cases are tested.
 
 ## Manual vs automated
 
-- **Test plan** (`TEST_PLAN.md`) includes the cases, wether they are automated or not as well as questions for the PO.
+- **Test plan** (`TEST_PLAN.md`) includes the cases, whether they are automated or not as well as questions for the PO.
 - The **Automated tests** are located in(`tests/`)
-- The strictly **Manual test cases:** are the screen checks (section E, because the assessment has no UI). Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
-- Most calculation, rounding and bad-input cases exist in both on manual and automated cases on purpose. In a real project the manual run would be a one-off and the automated test would become part of CI/CD (see how I also added GitHub Actions workflow to run the tests)
+- The strictly **Manual test cases:** are: the screen checks (section E, because the assessment has no UI). Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
+- Most calculations, rounding and bad-input cases exist in both manual and automated cases on purpose. In a real project the manual run would be a one-off and the automated tests would become part of CI/CD (see how I also added GitHub Actions workflow to run the tests)
 
 ## How I would test the real application
 
@@ -101,4 +101,4 @@ Both cases are tested.
 
 **How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and bad input. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
 
-**Not covered here:** fees, taxes, minimum trade sizes, real market prices, and how the numbers get into the app (a file, an API or a screen). I would ask about each before testing it.
+**Not covered here:** fees, taxes, minimum trade sizes, real market prices, and how the numbers get into the app (a file, an API or a screen).
