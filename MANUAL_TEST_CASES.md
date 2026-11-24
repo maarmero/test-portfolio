@@ -26,7 +26,7 @@ no screen.
 
 ## A. Main calculation
 
-| ID | Title | Pri | What to do | What should happen | Automated? |
+| ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-01 | The assessment example | P1 | Enter the 5 stocks: IBM 20/10 @150, MSFT 20/20 @90, ORCL 20/30 @220, AAPL 20/20 @450, HD 20/20 @70 | IBM **+66** (buy), ORCL **−45** (sell), MSFT, AAPL and HD **0** | `test_assessment_example_gives_66_buy_and_45_sell` |
 | TC-02 | Money in equals money out | P1 | Take the TC-01 result and work out the money: shares bought × price, and shares sold × price | 66 × 150 = $9,900 spent on IBM; 45 × 220 = $9,900 received from ORCL; difference $0 | `test_assessment_example_money_in_equals_money_out` |
@@ -47,7 +47,7 @@ no screen.
 Each case uses two stocks so that the Target % and the Current % each add up to 100.
 Stock B is only a filler to make that work; check the result for stock A. The account is $100,000.
 
-| ID | Title | Pri | What to do | What should happen | Automated? |
+| ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-20 | Buying: round down | P1 | A: target 20, current 10, price 150 (needs $10,000 more, which is 66.67 shares). B (filler): target 80, current 90, price 1 | A +66, not 67 | `test_buying_rounds_down` |
 | TC-21 | Selling: round down | P1 | A: target 10, current 20, price 150 (needs $10,000 less, which is 66.67 shares). B (filler): target 90, current 80, price 1 | A −66, not −67 | `test_selling_rounds_down_towards_zero` |
@@ -57,7 +57,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 
 ## C. Bad input (the app should reject mistakes)
 
-| ID | Title | Pri | What to do | What should happen | Automated? |
+| ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-30 | Target % does not add up | P1 | Target % values add up to 105 | Clear error message, no buy or sell results | `test_target_percent_not_adding_up_to_100` |
 | TC-31 | Current % does not add up | P1 | Current % values add up to 95 | Clear error message, no buy or sell results | `test_current_percent_not_adding_up_to_100` |
@@ -72,7 +72,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 
 ## D. Extra checks
 
-| ID | Title | Pri | What to do | What should happen | Automated? |
+| ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-40 | Order of rows | P2 | Run TC-01, then enter the same stocks in a different order | Each stock gets the same result as before | `test_order_of_rows_does_not_matter` |
 | TC-41 | Run it twice | P2 | Do the TC-01 trades, update the Current % to match, then run again | Each stock is at most 1 share away from done | `test_running_again_after_trading_needs_almost_nothing` |
@@ -85,7 +85,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 **All manual only.** The assessment has no screen. These checks apply if the app were a web page with a form
 for the stocks and a results column called "Number of shares to buy/sell".
 
-| ID | Title | Pri | What to do | What should happen |
+| ID | Title | Pri | Steps | Expected Result |
 |----|-------|-----|------------|--------------------|
 | TC-50 | Results are easy to read | P2 | Run TC-01 on the screen | You can tell buys from sells (a plus or minus sign, or the words Buy and Sell); a result of 0 shows as 0 or "—", not an empty box |
 | TC-51 | Numbers look right | P2 | Use an account of $1,000,000 and prices with cents | Large numbers have separators ($1,000,000), prices show 2 decimals, shares show as whole numbers |
