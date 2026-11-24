@@ -17,7 +17,7 @@ from rebalancer import rebalance
 # ---- the assessment example --------------------------------------------------
 
 @pytest.mark.p1
-def test_reference_example_buys_and_sells_the_expected_shares():  # TC-01, TC-02, TC-13 (a)
+def test_reference_example_result():  # TC-01, TC-02, TC-13 (a)
     stocks = assessment_stocks()
     result = rebalance(100_000, stocks)
     assert result == {"IBM": 66, "MSFT": 0, "ORCL": -45, "AAPL": 0, "HD": 0}
@@ -99,7 +99,7 @@ def test_account_value_with_cents():  # TC-11
     assert rebalance("12345.67", stocks) == {"A": 1, "B": -123}
 
 
-# ---- ending up on target (the yellow question in the assessment) -------------
+# ---- ending up on target (the assessment asks: what gets every stock to zero variance?) ----
 
 PORTFOLIOS = {
     "assessment example": assessment_stocks(),
