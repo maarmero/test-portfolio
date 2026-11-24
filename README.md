@@ -86,10 +86,10 @@ Both cases are tested.
 
 ## Manual vs automated
 
-- **Manual cases** (`MANUAL_TEST_CASES.md`) are the test design. A person runs them by hand the first time, or when something changes, and judges the result.
-- **Automated tests** (`tests/`) repeat the same checks quickly and the same way on every change. The "Automated?" column in the manual file points each manual case to its test.
-- **Manual only:** the screen checks (section E, because the assessment has no UI) and the questions for the product owner. Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
-- Most calculation, rounding and bad-input cases exist in both on purpose. In a real project the manual run would be a one-off and the automated test would stay, to catch anything that breaks later.
+- **Test plan** (`TEST_PLAN.md`) includes the cases, wether they are automated or not as well as questions for the PO.
+- The **Automated tests** are located in(`tests/`)
+- The strictly **Manual test cases:** are the screen checks (section E, because the assessment has no UI). Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
+- Most calculation, rounding and bad-input cases exist in both on manual and automated cases on purpose. In a real project the manual run would be a one-off and the automated test would become part of CI/CD (see how I also added GitHub Actions workflow to run the tests)
 
 ## How I would test the real application
 
