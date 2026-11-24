@@ -1,4 +1,4 @@
-"""Section C of TEST_PLAN.md: bad input. The app must reject mistakes with an error."""
+"""Section C of TEST_PLAN.md: input validation. The app must reject invalid input with an error."""
 import pytest
 
 from helpers import assessment_stocks, stock
@@ -23,7 +23,7 @@ def test_current_percent_not_adding_up_to_100():  # TC-31
 
 @pytest.mark.parametrize("price", [0, -5, "x", None])  # TC-32, TC-33, TC-34, TC-39
 @pytest.mark.p1
-def test_bad_price(price):
+def test_invalid_price(price):
     stocks = assessment_stocks()
     stocks[1] = stock("MSFT", 20, 20, price)
     with pytest.raises(RebalanceError):
@@ -32,7 +32,7 @@ def test_bad_price(price):
 
 @pytest.mark.parametrize("account_value", [0, -1, "abc", None])  # TC-35, TC-39
 @pytest.mark.p1
-def test_bad_account_value(account_value):
+def test_invalid_account_value(account_value):
     with pytest.raises(RebalanceError):
         rebalance(account_value, assessment_stocks())
 

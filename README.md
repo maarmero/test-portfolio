@@ -10,7 +10,7 @@ Manual and automated test cases for a portfolio rebalancing problem
 | File | Purpose |
 |------|---------|
 | `rebalancer.py` | Small reference implementation (the "application under test") |
-| `tests/` | Automated pytest suite, grouped by section of `TEST_PLAN.md`: `test_main_calculation.py` (A), `test_rounding.py` (B), `test_bad_input.py` (C), `test_extra_checks.py` (D). `helpers.py` holds the shared setup |
+| `tests/` | Automated pytest suite, grouped by section of `TEST_PLAN.md`: `test_main_calculation.py` (A), `test_rounding.py` (B), `test_input_validation.py` (C), `test_extra_checks.py` (D). `helpers.py` holds the shared setup |
 | `TEST_PLAN.md` | test cases with IDs, priority, expected results and automation coverage |
 
 ## Run
@@ -109,9 +109,9 @@ Both cases are tested.
 1. **Get the rules in writing first.** Agree the rounding rule, whether part shares are allowed, and what happens to leftover cash. Most wrong answers here would come from unclear rules, not from bad maths. The open questions are at the end of `TEST_PLAN.md`.
 2. **Check the main answer first.** The assessment example (buy 66 IBM, sell 45 ORCL), then the buy / sell / nothing-to-do cases. If these are wrong, nothing else matters.
 3. **Then the risky areas.** Rounding (the number is almost never whole), money in versus money out, and very large or very small values.
-4. **Then bad input.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
+4. **Then input validation.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
 5. **Automate what repeats.** Calculation, rounding and bad-input checks are added onto the automated suite which runs on every PR merge.
 
-**How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and bad input. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
+**How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and input validation. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
 
 **Not covered here:** fees, taxes, minimum trade sizes, real market prices, and how the numbers get into the app (a file, an API or a screen).

@@ -18,7 +18,7 @@ to buy or sell so the account matches the mix you want.
 
 Priority: P1 = must pass, P2 = important, P3 = nice to have.
 
-**Automated?** column: the pytest test (in the `tests/` folder: `test_main_calculation.py`, `test_rounding.py`, `test_bad_input.py`, `test_extra_checks.py`) that checks the same
+**Automated?** column: the pytest test (in the `tests/` folder: `test_main_calculation.py`, `test_rounding.py`, `test_input_validation.py`, `test_extra_checks.py`) that checks the same
 behaviour. Sections A to D
 are all automated. Section E (screen checks) is manual only, because the assessment has
 no screen.
@@ -55,20 +55,20 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 | TC-23 | Divides evenly | P2 | A: target 20, current 10, price 100 (needs $10,000 more, which is exactly 100 shares). B (filler): target 80, current 90, price 1 | A +100 | `test_buying_rounds_down` |
 | TC-24 | Never trade too much | P1 | Run any example above, or TC-01 | For every stock, the money value of the shares traded (shares × price) is never more than the money value needed | `test_trades_never_overshoot_and_end_close_to_target` |
 
-## C. Bad input (the app should reject mistakes)
+## C. Input validation (the app rejects invalid input)
 
 | ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-30 | Target % does not add up | P1 | Target % values add up to 105 | Clear error message, no buy or sell results | `test_target_percent_not_adding_up_to_100` |
 | TC-31 | Current % does not add up | P1 | Current % values add up to 105 | Clear error message, no buy or sell results | `test_current_percent_not_adding_up_to_100` |
-| TC-32 | Price of 0 | P1 | MSFT price is 0 | Error message, the app does not crash | `test_bad_price` |
-| TC-33 | Negative price | P1 | Price is −5 | Error message | `test_bad_price` |
-| TC-34 | Price is text | P2 | Price is "abc" | Error message | `test_bad_price` |
-| TC-35 | Account value of 0 or less | P1 | Account value 0, then −1 | Error message each time | `test_bad_account_value` |
+| TC-32 | Price of 0 | P1 | MSFT price is 0 | Error message, the app does not crash | `test_invalid_price` |
+| TC-33 | Negative price | P1 | Price is −5 | Error message | `test_invalid_price` |
+| TC-34 | Price is text | P2 | Price is "abc" | Error message | `test_invalid_price` |
+| TC-35 | Account value of 0 or less | P1 | Account value 0, then −1 | Error message each time | `test_invalid_account_value` |
 | TC-36 | Negative percentage | P2 | Target % is −10, then (separately) Current % is −10 | Error message | `test_negative_percentage` |
 | TC-37 | Same stock twice | P2 | IBM entered two times | Error message | `test_same_stock_twice` |
 | TC-38 | No stocks | P2 | Submit with no stocks entered | Error message | `test_no_stocks` |
-| TC-39 | Empty field | P2 | Leave one Target % empty | Error message that says which field is empty | `test_empty_percentage_names_the_field` (also an empty price or account value in `test_bad_price`, `test_bad_account_value`) |
+| TC-39 | Empty field | P2 | Leave one Target % empty | Error message that says which field is empty | `test_empty_percentage_names_the_field` (also an empty price or account value in `test_invalid_price`, `test_invalid_account_value`) |
 
 ## D. Extra checks
 
