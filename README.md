@@ -88,7 +88,7 @@ Both cases are tested.
 
 - **Test plan** (`TEST_PLAN.md`) includes the cases, whether they are automated or not as well as questions for the PO.
 - The **Automated tests** are located in(`tests/`)
-- The strictly **Manual test cases:** are: the screen checks (section E, because the assessment has no UI). Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
+- The strictly **Manual test cases** are the screen checks (section E, because the assessment has no UI). Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
 - Most calculations, rounding and bad-input cases exist in both manual and automated cases on purpose. In a real project the manual run would be a one-off and the automated tests would become part of CI/CD (see how I also added GitHub Actions workflow to run the tests)
 
 ## How I would test the real application
