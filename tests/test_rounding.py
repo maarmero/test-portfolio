@@ -1,4 +1,4 @@
-"""Section B of MANUAL_TEST_CASES.md: rounding (66.67 shares must become 66)."""
+"""Section B of TEST_PLAN.md: rounding (66.67 shares must become 66)."""
 from decimal import Decimal
 
 import pytest

@@ -1,4 +1,4 @@
-"""Section C of MANUAL_TEST_CASES.md: bad input. The app must reject mistakes with an error."""
+"""Section C of TEST_PLAN.md: bad input. The app must reject mistakes with an error."""
 import pytest
 
 from helpers import assessment_stocks, stock

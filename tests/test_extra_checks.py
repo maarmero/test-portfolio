@@ -1,4 +1,4 @@
-"""Section D of MANUAL_TEST_CASES.md: extra checks (order of rows, very big and very small numbers)."""
+"""Section D of TEST_PLAN.md: extra checks (order of rows, very big and very small numbers)."""
 from decimal import Decimal
 
 from helpers import assessment_stocks, stock

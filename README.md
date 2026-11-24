@@ -11,7 +11,7 @@ Manual and automated test cases for a portfolio rebalancing problem
 |------|---------|
 | `rebalancer.py` | Small reference implementation (the "application under test") |
 | `tests/` | Automated pytest suite (48 tests), one file per section of the manual cases: `test_main_calculation.py` (A), `test_rounding.py` (B), `test_bad_input.py` (C), `test_extra_checks.py` (D). `helpers.py` holds the shared setup |
-| `MANUAL_TEST_CASES.md` | Manual test cases with IDs, priority, expected results |
+| `TEST_PLAN.md` | Manual test cases with IDs, priority, expected results |
 
 ## Run
 
@@ -82,7 +82,7 @@ Both cases are tested.
 7. Prices are above 0 and the same for buying and selling. No fees, taxes or minimum trade size.
 8. Percentages are shares of the whole account value, counting all five stocks.
 9. The program uses exact decimal numbers, so there are no tiny rounding errors (for example with 0.01%).
-10. No UI exists in the assessment, so there are no automated UI tests. `MANUAL_TEST_CASES.md` section E has a few hypothetical UI-style manual cases.
+10. No UI exists in the assessment, so there are no automated UI tests. `TEST_PLAN.md` section E has a few hypothetical UI-style manual cases.
 
 ## Manual vs automated
 
@@ -93,7 +93,7 @@ Both cases are tested.
 
 ## How I would test the real application
 
-1. **Get the rules in writing first.** Agree the rounding rule, whether part shares are allowed, and what happens to leftover cash. Most wrong answers here would come from unclear rules, not from bad maths. The open questions are at the end of `MANUAL_TEST_CASES.md`.
+1. **Get the rules in writing first.** Agree the rounding rule, whether part shares are allowed, and what happens to leftover cash. Most wrong answers here would come from unclear rules, not from bad maths. The open questions are at the end of `TEST_PLAN.md`.
 2. **Check the main answer first.** The assessment example (buy 66 IBM, sell 45 ORCL), then the buy / sell / nothing-to-do cases. If these are wrong, nothing else matters.
 3. **Then the risky areas.** Rounding (the number is almost never whole), money in versus money out, and very large or very small values.
 4. **Then bad input.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
