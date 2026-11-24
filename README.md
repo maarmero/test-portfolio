@@ -45,6 +45,11 @@ shares         = money to trade / price of one share      (+ buy, − sell)
 *Variance* is how far a stock is from its target: Current % minus Target %. A negative
 variance means buy, a positive one means sell.
 
+**Sign convention:** the formula uses Target % − Current %, which is the opposite sign of
+the assessment's variance (Current % − Target %). So the output is **+ for buy and − for sell**,
+while variance is **− for buy and + for sell**. Both describe the same trade. For example,
+IBM has a variance of −10 and a result of +66.
+
 Expected output for the assessment data:
 
 | Security | Target % | Current % | Variance | Price | Shares |
@@ -71,7 +76,7 @@ Both cases are tested.
 3. Rounding is **down** (towards 0) for both buys and sells, so a trade never goes beyond what is needed and the account never spends more than it receives.
 4. The small amount of money left over after rounding is ignored.
 5. "100% is vested" means every holding can be sold.
-6. The Target % values must add up to exactly 100, and so must the Current % values. Otherwise the input is rejected.
+6. The Target % values must add up to exactly 100, and so must the Current % values. Otherwise the input is rejected. The assessment does not say this directly; I assumed it because the account is fully invested ("100% is vested") and the example data adds up to 100.
 7. Prices are above 0 and the same for buying and selling. No fees, taxes or minimum trade size.
 8. Percentages are shares of the whole account value, counting all five stocks.
 9. The program uses exact decimal numbers, so there are no tiny rounding errors (for example with 0.01%).
