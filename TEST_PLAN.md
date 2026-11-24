@@ -103,5 +103,5 @@ for the stocks and a results column called "Number of shares to buy/sell".
 1. Can we trade part of a share, or only whole shares?
 2. Is rounding down okay, or should it round to the nearest whole share?
 3. What should happen to the small amount of money left over after rounding?
-4. The assessment says the account is "100% vested". We read that as: everything can be sold. Is that right?
-5. Do taxes, fees or a minimum trade size matter? (We assumed they do not.)
+4. The assessment says the account is "100% vested". I read that as: everything can be sold. Is that right?
+5. Do taxes, fees or a minimum trade size matter? (I assumed they do not.)
