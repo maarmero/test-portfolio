@@ -1,5 +1,7 @@
 # Portfolio Rebalancer Tests
 
+[![Tests](https://github.com/maarmero/test-portfolio/actions/workflows/tests.yml/badge.svg)](https://github.com/maarmero/test-portfolio/actions/workflows/tests.yml)
+
 Manual and automated test cases for a portfolio rebalancing problem
 (Account ABC, $100K, IBM / MSFT / ORCL / AAPL / HD).
 
