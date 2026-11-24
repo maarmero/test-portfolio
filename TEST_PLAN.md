@@ -19,8 +19,7 @@ to buy or sell so the account matches the mix you want.
 Priority: P1 = must pass, P2 = important, P3 = nice to have.
 
 **Automated?** column: the pytest test (in the `tests/` folder, one file per section: `test_main_calculation.py`, `test_rounding.py`, `test_bad_input.py`, `test_extra_checks.py`) that checks the same
-thing. These cases are the test design: do them by hand the first time or when something
-changes. The automated tests repeat the same checks quickly every time. Sections A to D
+behaviour. Sections A to D
 are all automated. Section E (screen checks) is manual only, because the assessment has
 no screen.
 
