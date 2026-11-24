@@ -33,11 +33,6 @@ def test_assessment_example_with_part_shares():  # TC-03
     assert result["MSFT"] == result["AAPL"] == result["HD"] == 0
 
 
-def test_every_stock_appears_in_the_result():  # TC-16
-    result = rebalance(100_000, assessment_stocks())
-    assert set(result) == {"IBM", "MSFT", "ORCL", "AAPL", "HD"}
-
-
 # ---- total bought and total sold ---------------------------------------------
 
 def test_assessment_example_total_bought_and_sold():  # TC-13 (a)

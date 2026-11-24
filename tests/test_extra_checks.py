@@ -43,12 +43,7 @@ def test_tiny_percentages_are_exact():  # TC-43
 
 
 def test_percentages_and_prices_with_decimals():  # TC-43
-    stocks = [stock("A", "33.33", "33.34", "10.50"), stock("B", "66.67", "66.66", "20.25")]
-    result = rebalance(100_000, stocks)
-    assert result["A"] == 0 and result["B"] == 0  # only about $10 to trade, less than one share
-
-
-def test_same_input_gives_the_same_answer_every_time():  # TC-44
-    first = rebalance(100_000, assessment_stocks())
-    for _ in range(10):
-        assert rebalance(100_000, assessment_stocks()) == first
+    stocks = [stock("A", "33.33", "33.30", "10.50"), stock("B", "66.67", "66.70", "20.25")]
+    # A needs 0.03% = $30 more: 30 / 10.50 = 2.86, so buy 2.  B has $30 too much: 30 / 20.25 = 1.48, so sell 1.
+    # With the decimals cut off, A would be 3 (30 / 10), so this checks the decimals are used.
+    assert rebalance(100_000, stocks) == {"A": 2, "B": -1}

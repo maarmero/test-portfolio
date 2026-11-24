@@ -46,7 +46,7 @@ def test_same_stock_twice():  # TC-37
 
 
 def test_no_stocks():  # TC-38
-    with pytest.raises(RebalanceError):
+    with pytest.raises(RebalanceError, match="at least one stock"):
         rebalance(100_000, [])
 
 

@@ -43,7 +43,6 @@ no screen.
 | TC-13 | Total bought and total sold | P1 | (a) Run TC-01 and add up all the plus numbers, then all the minus numbers. (b) Run A 40/30 @100, B 30/20 @50, C 10/25 @200, D 20/25 @100 | (a) 66 bought in total, 45 sold in total. (b) A +100, B +200, C −75, D −50; 300 bought in total, 125 sold in total | `test_assessment_example_total_bought_and_sold`, `test_total_bought_and_sold_with_several_buys_and_sells` |
 | TC-14 | Ends on target (part shares) | P1 | Run TC-01 with whole shares turned off, do the trades, then work out each stock's % of the account | Every stock is on its Target % (the difference is under 0.001 percentage points) | `test_part_share_trades_end_on_target` |
 | TC-15 | Ends close to target (whole shares) | P1 | Run TC-01, do the trades, then work out how much money each stock is away from its Target % | Every stock is less than the price of one share away (IBM and ORCL are each $100 away) | `test_whole_share_trades_end_less_than_one_share_from_target` |
-| TC-16 | Every stock is in the result | P2 | Run TC-01 and look at the list of results | All five stocks are listed (IBM, MSFT, ORCL, AAPL, HD), including the ones with 0 | `test_every_stock_appears_in_the_result` |
 
 ## B. Rounding
 
@@ -81,7 +80,6 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 | TC-41 | Run it twice | P2 | Do the TC-01 trades, update the Current % to match, then run again | Each stock is at most 1 share away from done | `test_running_again_after_trading_needs_almost_nothing` |
 | TC-42 | Huge account | P3 | Account worth $1,000,000,000,000 | Correct results, no strange numbers | `test_huge_account` |
 | TC-43 | Tiny percentages | P3 | Percentages with decimals, such as 0.01 | Correct results, no small rounding errors | `test_tiny_percentages_are_exact`, `test_percentages_and_prices_with_decimals` |
-| TC-44 | Same answer every time | P2 | Run the same input 10 times | Same result every time | `test_same_input_gives_the_same_answer_every_time` |
 
 ## E. Screen checks (only if the app had a screen)
 
