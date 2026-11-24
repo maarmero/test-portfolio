@@ -1,9 +1,7 @@
 """Section B of TEST_PLAN.md: rounding (66.67 shares must become 66)."""
-from decimal import Decimal
-
 import pytest
 
-from helpers import assessment_stocks, stock
+from helpers import stock
 from rebalancer import rebalance
 
 
@@ -28,11 +26,3 @@ def test_selling_rounds_down_towards_zero():  # TC-21
     # A has $10,000 too much. 66.67 becomes -66, not -67.
     stocks = [stock("A", 10, 20, 150), stock("B", 90, 80, 1)]
     assert rebalance(100_000, stocks)["A"] == -66
-
-
-@pytest.mark.p1
-def test_never_trade_more_than_needed():  # TC-24
-    for symbol, shares in rebalance(100_000, assessment_stocks()).items():
-        s = next(x for x in assessment_stocks() if x.symbol == symbol)
-        money_needed = (Decimal(s.target_pct) - Decimal(s.current_pct)) / 100 * 100_000
-        assert abs(shares * s.price) <= abs(money_needed)

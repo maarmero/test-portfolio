@@ -16,9 +16,14 @@ from rebalancer import rebalance
 # ---- the assessment example --------------------------------------------------
 
 @pytest.mark.p1
-def test_reference_example_buys_and_sells_the_expected_shares():  # TC-01
-    result = rebalance(100_000, assessment_stocks())
+def test_reference_example_buys_and_sells_the_expected_shares():  # TC-01, TC-02, TC-13 (a)
+    stocks = assessment_stocks()
+    result = rebalance(100_000, stocks)
     assert result == {"IBM": 66, "MSFT": 0, "ORCL": -45, "AAPL": 0, "HD": 0}
+    # TC-13 (a): 66 shares bought and 45 sold in total
+    assert total_bought_and_sold(result) == (66, 45)
+    # TC-02: 66 x $150 = $9,900 spent, 45 x $220 = $9,900 received
+    assert money_spent_minus_money_received(stocks, result) == 0
 
 
 @pytest.mark.p2
@@ -31,39 +36,22 @@ def test_part_shares_are_kept_to_four_decimals():  # TC-03
 
 # ---- total bought and total sold ---------------------------------------------
 
-@pytest.mark.p1
-def test_total_bought_and_sold():  # TC-13 (a)
-    assert total_bought_and_sold(rebalance(100_000, assessment_stocks())) == (66, 45)
+SEVERAL_BUYS_AND_SELLS = [
+    stock("A", 40, 30, 100),  # need $10,000 more: 10,000 / 100 = buy 100
+    stock("B", 30, 20, 50),   # need $10,000 more: 10,000 / 50  = buy 200
+    stock("C", 10, 25, 200),  # have $15,000 too much: 15,000 / 200 = sell 75
+    stock("D", 20, 25, 100),  # have $5,000 too much: 5,000 / 100 = sell 50
+]
 
 
 @pytest.mark.p1
 def test_totals_with_several_buys_and_sells():  # TC-13 (b)
-    stocks = [
-        stock("A", 40, 30, 100),  # need $10,000 more: 10,000 / 100 = buy 100
-        stock("B", 30, 20, 50),   # need $10,000 more: 10,000 / 50  = buy 200
-        stock("C", 10, 25, 200),  # have $15,000 too much: 15,000 / 200 = sell 75
-        stock("D", 20, 25, 100),  # have $5,000 too much: 5,000 / 100 = sell 50
-    ]
-    result = rebalance(100_000, stocks)
+    result = rebalance(100_000, SEVERAL_BUYS_AND_SELLS)
     assert result == {"A": 100, "B": 200, "C": -75, "D": -50}
     assert total_bought_and_sold(result) == (300, 125)
 
 
-# ---- buy, sell or do nothing -------------------------------------------------
-
-@pytest.mark.parametrize(
-    "target, current, expected",
-    [
-        (30, 20, 66),    # current below target: buy ($10,000 / $150 = 66.67)
-        (20, 30, -66),   # current above target: sell
-        (20, 20, 0),     # current equals target: do nothing
-    ],
-)
-@pytest.mark.p1
-def test_buy_sell_or_nothing_depending_on_current_vs_target(target, current, expected):  # TC-06
-    stocks = [stock("A", target, current, 150), stock("B", 100 - target, 100 - current, 1)]
-    assert rebalance(100_000, stocks)["A"] == expected
-
+# ---- nothing to change -------------------------------------------------------
 
 @pytest.mark.parametrize("how_many_stocks", [1, 5, 10])
 @pytest.mark.p1
@@ -109,25 +97,28 @@ def test_account_value_with_cents():  # TC-11
 
 # ---- ending up on target (the yellow question in the assessment) -------------
 
+PORTFOLIOS = {
+    "assessment example": assessment_stocks(),
+    "several buys and sells": SEVERAL_BUYS_AND_SELLS,
+    "one buy at an uneven price": [stock("A", 20, 10, 150), stock("B", 80, 90, 1)],
+    "swap everything": [stock("A", 0, 100, 100), stock("B", 100, 0, 50)],
+    "odd prices": [stock("A", 33, 20, 7), stock("B", 33, 50, 13), stock("C", 34, 30, 29)],
+}
+
+
+@pytest.mark.parametrize("stocks", PORTFOLIOS.values(), ids=PORTFOLIOS.keys())
 @pytest.mark.p1
-def test_part_share_trades_end_on_target():  # TC-14
-    stocks = assessment_stocks()
-    trades = rebalance(100_000, stocks, whole_shares=False)
-    for symbol, (points_off, _) in distance_from_target_after_trades(stocks, trades).items():
-        # shares are rounded to 4 decimals, so we are off by about 0.00001 points at most
-        assert abs(points_off) < Decimal("0.001"), symbol
-
-
-@pytest.mark.p1
-def test_whole_share_trades_balance_and_end_close_to_target():  # TC-02, TC-15
-    stocks = assessment_stocks()
-    trades = rebalance(100_000, stocks)
-
-    # TC-02: 66 shares x $150 = $9,900 spent, 45 shares x $220 = $9,900 received
-    assert money_spent_minus_money_received(stocks, trades) == 0
-
-    # TC-15: every stock ends less than the price of one share away from its Target %
-    off_by = distance_from_target_after_trades(stocks, trades)
+def test_trades_never_overshoot_and_end_close_to_target(stocks):  # TC-14, TC-15, TC-24
+    whole = rebalance(100_000, stocks)
+    off_by = distance_from_target_after_trades(stocks, whole)
     for s in stocks:
-        _, dollars_off = off_by[s.symbol]
-        assert abs(dollars_off) < s.price, s.symbol
+        money_needed = (Decimal(s.target_pct) - Decimal(s.current_pct)) / 100 * 100_000
+        # TC-24: never trade more than needed
+        assert abs(whole[s.symbol] * s.price) <= abs(money_needed), s.symbol
+        # TC-15: whole shares end less than the price of one share away from the Target %
+        assert abs(off_by[s.symbol][1]) < s.price, s.symbol
+
+    # TC-14: part shares are rounded to 4 decimals, so each stock ends within half of 0.0001 shares
+    part = rebalance(100_000, stocks, whole_shares=False)
+    for s in stocks:
+        assert abs(distance_from_target_after_trades(stocks, part)[s.symbol][1]) <= s.price * Decimal("0.00005"), s.symbol
