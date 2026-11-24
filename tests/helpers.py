@@ -39,15 +39,17 @@ def total_bought_and_sold(result):
     return bought, sold
 
 
-def distance_from_target_after_trades(stocks, trades, account_value=100_000):
-    """After doing the trades, how far is each stock from its target?
+def money_needed(s, account_value):
+    """Dollars to buy (+) or sell (-) to take one stock from its Current % to its Target %."""
+    return (Decimal(str(s.target_pct)) - Decimal(str(s.current_pct))) / 100 * Decimal(str(account_value))
 
-    Returns {symbol: (percentage points off, dollars off)}. 0 means exactly on target.
+
+def dollars_off_target_after_trades(stocks, trades, account_value):
+    """After doing the trades, how many dollars is each stock away from its Target %?
+
+    Returns {symbol: dollars}. 0 means exactly on target.
     """
-    out = {}
-    for s in stocks:
-        value_now = Decimal(s.current_pct) / 100 * account_value + trades[s.symbol] * s.price
-        value_at_target = Decimal(s.target_pct) / 100 * account_value
-        dollars_off = value_now - value_at_target
-        out[s.symbol] = (dollars_off / account_value * 100, dollars_off)
-    return out
+    return {
+        s.symbol: trades[s.symbol] * Decimal(str(s.price)) - money_needed(s, account_value)
+        for s in stocks
+    }

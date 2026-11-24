@@ -5,7 +5,8 @@ import pytest
 
 from helpers import (
     assessment_stocks,
-    distance_from_target_after_trades,
+    dollars_off_target_after_trades,
+    money_needed,
     money_spent_minus_money_received,
     stock,
     total_bought_and_sold,
@@ -112,16 +113,18 @@ PORTFOLIOS = {
 @pytest.mark.parametrize("stocks", PORTFOLIOS.values(), ids=PORTFOLIOS.keys())
 @pytest.mark.p1
 def test_trades_never_overshoot_and_end_close_to_target(stocks):  # TC-14, TC-15, TC-24
-    whole = rebalance(100_000, stocks)
-    off_by = distance_from_target_after_trades(stocks, whole)
+    account_value = 100_000
+
+    whole = rebalance(account_value, stocks)
+    off_by = dollars_off_target_after_trades(stocks, whole, account_value)
     for s in stocks:
-        money_needed = (Decimal(s.target_pct) - Decimal(s.current_pct)) / 100 * 100_000
         # TC-24: never trade more than needed
-        assert abs(whole[s.symbol] * s.price) <= abs(money_needed), s.symbol
+        assert abs(whole[s.symbol] * s.price) <= abs(money_needed(s, account_value)), s.symbol
         # TC-15: whole shares end less than the price of one share away from the Target %
-        assert abs(off_by[s.symbol][1]) < s.price, s.symbol
+        assert abs(off_by[s.symbol]) < s.price, s.symbol
 
     # TC-14: part shares are rounded to 4 decimals, so each stock ends within half of 0.0001 shares
-    part = rebalance(100_000, stocks, whole_shares=False)
+    part = rebalance(account_value, stocks, whole_shares=False)
+    off_by_part = dollars_off_target_after_trades(stocks, part, account_value)
     for s in stocks:
-        assert abs(distance_from_target_after_trades(stocks, part)[s.symbol][1]) <= s.price * Decimal("0.00005"), s.symbol
+        assert abs(off_by_part[s.symbol]) <= s.price * Decimal("0.00005"), s.symbol
