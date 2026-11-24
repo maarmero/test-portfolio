@@ -1,4 +1,4 @@
-# Manual Test Cases — Portfolio Rebalancer
+# Test Plan — Portfolio Rebalancer
 
 ## How to read these
 
