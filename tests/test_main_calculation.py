@@ -33,7 +33,7 @@ def test_assessment_example_with_part_shares():  # TC-03
     assert result["MSFT"] == result["AAPL"] == result["HD"] == 0
 
 
-def test_every_stock_appears_in_the_result():
+def test_every_stock_appears_in_the_result():  # TC-16
     result = rebalance(100_000, assessment_stocks())
     assert set(result) == {"IBM", "MSFT", "ORCL", "AAPL", "HD"}
 
@@ -73,7 +73,7 @@ def test_one_to_buy_and_one_to_sell():  # TC-05
         (20, 20, 0),     # current equals target: do nothing
     ],
 )
-def test_buy_sell_or_nothing_depending_on_current_vs_target(target, current, expected):  # TC-05, TC-06
+def test_buy_sell_or_nothing_depending_on_current_vs_target(target, current, expected):  # TC-06
     stocks = [stock("A", target, current, 150), stock("B", 100 - target, 100 - current, 1)]
     assert rebalance(100_000, stocks)["A"] == expected
 
@@ -116,7 +116,7 @@ def test_ten_stocks_with_nothing_to_change():  # TC-12
 
 # ---- ending up on target (the yellow question in the assessment) -------------
 
-def test_part_share_trades_end_on_target():
+def test_part_share_trades_end_on_target():  # TC-14
     stocks = assessment_stocks()
     trades = rebalance(100_000, stocks, whole_shares=False)
     for symbol, (points_off, _) in distance_from_target_after_trades(stocks, trades).items():
@@ -124,7 +124,7 @@ def test_part_share_trades_end_on_target():
         assert abs(points_off) < Decimal("0.001"), symbol
 
 
-def test_whole_share_trades_end_less_than_one_share_from_target():
+def test_whole_share_trades_end_less_than_one_share_from_target():  # TC-15
     stocks = assessment_stocks()
     trades = rebalance(100_000, stocks)
     off_by = distance_from_target_after_trades(stocks, trades)

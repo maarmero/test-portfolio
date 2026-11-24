@@ -16,7 +16,7 @@ from rebalancer import rebalance
         (20_000, 0),    # TC-22: only half a share, so no trade
     ],
 )
-def test_buying_rounds_down(price, expected):
+def test_buying_rounds_down(price, expected):  # TC-20, TC-22, TC-23
     # A needs $10,000 more. B is only there to make the percentages add up to 100.
     stocks = [stock("A", 20, 10, price), stock("B", 80, 90, 1)]
     assert rebalance(100_000, stocks)["A"] == expected

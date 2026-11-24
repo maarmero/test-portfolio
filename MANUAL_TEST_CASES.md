@@ -41,6 +41,9 @@ no screen.
 | TC-11 | Account value with cents | P3 | Account worth $12,345.67. A: target 50, current 40, price 10. B: target 50, current 60, price 10 | A +123, B −123 | `test_account_value_with_cents` |
 | TC-12 | Lots of stocks | P3 | 10 stocks, each target 10 and current 10 | All results 0 | `test_ten_stocks_with_nothing_to_change` |
 | TC-13 | Total bought and total sold | P1 | (a) Run TC-01 and add up all the plus numbers, then all the minus numbers. (b) Run A 40/30 @100, B 30/20 @50, C 10/25 @200, D 20/25 @100 | (a) 66 bought in total, 45 sold in total. (b) A +100, B +200, C −75, D −50; 300 bought in total, 125 sold in total | `test_assessment_example_total_bought_and_sold`, `test_total_bought_and_sold_with_several_buys_and_sells` |
+| TC-14 | Ends on target (part shares) | P1 | Run TC-01 with whole shares turned off, do the trades, then work out each stock's % of the account | Every stock is on its Target % (the difference is under 0.001 percentage points) | `test_part_share_trades_end_on_target` |
+| TC-15 | Ends close to target (whole shares) | P1 | Run TC-01, do the trades, then work out how much money each stock is away from its Target % | Every stock is less than the price of one share away (IBM and ORCL are each $100 away) | `test_whole_share_trades_end_less_than_one_share_from_target` |
+| TC-16 | Every stock is in the result | P2 | Run TC-01 and look at the list of results | All five stocks are listed (IBM, MSFT, ORCL, AAPL, HD), including the ones with 0 | `test_every_stock_appears_in_the_result` |
 
 ## B. Rounding
 
@@ -60,7 +63,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 | ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-30 | Target % does not add up | P1 | Target % values add up to 105 | Clear error message, no buy or sell results | `test_target_percent_not_adding_up_to_100` |
-| TC-31 | Current % does not add up | P1 | Current % values add up to 95 | Clear error message, no buy or sell results | `test_current_percent_not_adding_up_to_100` |
+| TC-31 | Current % does not add up | P1 | Current % values add up to 105 | Clear error message, no buy or sell results | `test_current_percent_not_adding_up_to_100` |
 | TC-32 | Price of 0 | P1 | MSFT price is 0 | Error message, the app does not crash | `test_bad_price` |
 | TC-33 | Negative price | P1 | Price is −5 | Error message | `test_bad_price` |
 | TC-34 | Price is text | P2 | Price is "abc" | Error message | `test_bad_price` |
