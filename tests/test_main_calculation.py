@@ -21,13 +21,6 @@ def test_reference_example_buys_and_sells_the_expected_shares():  # TC-01
     assert result == {"IBM": 66, "MSFT": 0, "ORCL": -45, "AAPL": 0, "HD": 0}
 
 
-@pytest.mark.p1
-def test_money_spent_equals_money_received():  # TC-02
-    # 66 shares x $150 = $9,900 spent, 45 shares x $220 = $9,900 received
-    result = rebalance(100_000, assessment_stocks())
-    assert money_spent_minus_money_received(assessment_stocks(), result) == 0
-
-
 @pytest.mark.p2
 def test_part_shares_are_kept_to_four_decimals():  # TC-03
     result = rebalance(100_000, assessment_stocks(), whole_shares=False)
@@ -126,9 +119,14 @@ def test_part_share_trades_end_on_target():  # TC-14
 
 
 @pytest.mark.p1
-def test_whole_share_trades_end_less_than_one_share_from_target():  # TC-15
+def test_whole_share_trades_balance_and_end_close_to_target():  # TC-02, TC-15
     stocks = assessment_stocks()
     trades = rebalance(100_000, stocks)
+
+    # TC-02: 66 shares x $150 = $9,900 spent, 45 shares x $220 = $9,900 received
+    assert money_spent_minus_money_received(stocks, trades) == 0
+
+    # TC-15: every stock ends less than the price of one share away from its Target %
     off_by = distance_from_target_after_trades(stocks, trades)
     for s in stocks:
         _, dollars_off = off_by[s.symbol]

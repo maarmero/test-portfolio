@@ -28,7 +28,7 @@ no screen.
 | ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
 | TC-01 | The assessment example | P1 | Enter the 5 stocks: IBM 20/10 @150, MSFT 20/20 @90, ORCL 20/30 @220, AAPL 20/20 @450, HD 20/20 @70 | IBM **+66** (buy), ORCL **−45** (sell), MSFT, AAPL and HD **0** | `test_reference_example_buys_and_sells_the_expected_shares` |
-| TC-02 | Money in equals money out | P1 | Take the TC-01 result and work out the money: shares bought × price, and shares sold × price | 66 × 150 = $9,900 spent on IBM; 45 × 220 = $9,900 received from ORCL; difference $0 | `test_money_spent_equals_money_received` |
+| TC-02 | Money in equals money out | P1 | Take the TC-01 result and work out the money: shares bought × price, and shares sold × price | 66 × 150 = $9,900 spent on IBM; 45 × 220 = $9,900 received from ORCL; difference $0 | `test_whole_share_trades_balance_and_end_close_to_target` |
 | TC-03 | Part shares allowed | P2 | Run TC-01 with whole shares turned off | IBM +66.6667, ORCL −45.4545, the rest 0 | `test_part_shares_are_kept_to_four_decimals` |
 | TC-04 | Nothing to change | P1 | Every stock has Current % equal to Target % | Every result is 0 | `test_nothing_to_change_gives_all_zeros` |
 | TC-06 | Buy or sell direction | P1 | Use one stock with Current % lower than Target %, and one with Current % higher | Current lower than Target gives a buy (+), Current higher than Target gives a sell (−) | `test_buy_sell_or_nothing_depending_on_current_vs_target` |
@@ -40,7 +40,7 @@ no screen.
 | TC-12 | Lots of stocks | P3 | 10 stocks, each target 10 and current 10 | All results 0 | `test_nothing_to_change_gives_all_zeros` |
 | TC-13 | Total bought and total sold | P1 | (a) Run TC-01 and add up all the plus numbers, then all the minus numbers. (b) Run A 40/30 @100, B 30/20 @50, C 10/25 @200, D 20/25 @100 | (a) 66 bought in total, 45 sold in total. (b) A +100, B +200, C −75, D −50; 300 bought in total, 125 sold in total | `test_total_bought_and_sold`, `test_totals_with_several_buys_and_sells` |
 | TC-14 | Ends on target (part shares) | P1 | Run TC-01 with whole shares turned off, do the trades, then work out each stock's % of the account | Every stock is on its Target % (the difference is under 0.001 percentage points) | `test_part_share_trades_end_on_target` |
-| TC-15 | Ends close to target (whole shares) | P1 | Run TC-01, do the trades, then work out how much money each stock is away from its Target % | Every stock is less than the price of one share away (IBM and ORCL are each $100 away) | `test_whole_share_trades_end_less_than_one_share_from_target` |
+| TC-15 | Ends close to target (whole shares) | P1 | Run TC-01, do the trades, then work out how much money each stock is away from its Target % | Every stock is less than the price of one share away (IBM and ORCL are each $100 away) | `test_whole_share_trades_balance_and_end_close_to_target` |
 
 ## B. Rounding
 
