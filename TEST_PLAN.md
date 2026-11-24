@@ -36,7 +36,7 @@ no screen.
 | TC-08 | Swap everything | P2 | A: target 0, current 100, price 100. B: target 100, current 0, price 50 | A −1000, B +2000 | `test_target_zero_percent_sells_the_whole_holding` |
 | TC-09 | Target 0% of one stock | P2 | A: target 0, current 25, price 100. B: target 100, current 75, price 100 | A −250 (sell it all), B +250 | `test_target_zero_percent_sells_the_whole_holding` |
 | TC-10 | Bigger account | P2 | Run TC-01 with an account worth $1,000,000 | IBM +666, ORCL −454 | `test_large_account_values` |
-| TC-11 | Account value with cents | P3 | Account worth $12,345.67. A: target 50, current 40, price 10. B: target 50, current 60, price 10 | A +123, B −123 | `test_account_value_with_cents` |
+| TC-11 | Account value with cents | P3 | Account worth $12,345.67. A: target 50, current 40, price 1,234.55. B: target 50, current 60, price 10 | A +1 (it would be 0 if the cents were ignored), B −123 | `test_account_value_with_cents` |
 | TC-12 | Lots of stocks | P3 | 10 stocks, each target 10 and current 10 | All results 0 | `test_nothing_to_change_gives_all_zeros` |
 | TC-13 | Total bought and total sold | P1 | (a) Run TC-01 and add up all the plus numbers, then all the minus numbers. (b) Run A 40/30 @100, B 30/20 @50, C 10/25 @200, D 20/25 @100 | (a) 66 bought in total, 45 sold in total. (b) A +100, B +200, C −75, D −50; 300 bought in total, 125 sold in total | `test_reference_example_buys_and_sells_the_expected_shares`, `test_totals_with_several_buys_and_sells` |
 | TC-14 | Ends on target (part shares) | P1 | Run TC-01 with whole shares turned off, do the trades, then work out each stock's % of the account | Every stock is on its Target % (the difference is under 0.001 percentage points) | `test_trades_never_overshoot_and_end_close_to_target` |

@@ -91,8 +91,11 @@ def test_large_account_values(account_value, ibm, orcl):  # TC-10, TC-42
 
 @pytest.mark.p3
 def test_account_value_with_cents():  # TC-11
-    stocks = [stock("A", 50, 40, 10), stock("B", 50, 60, 10)]
-    assert rebalance("12345.67", stocks) == {"A": 123, "B": -123}
+    stocks = [stock("A", 50, 40, "1234.55"), stock("B", 50, 60, 10)]
+    # A: 10% of $12,345.67 is $1,234.567, which is just over one share at $1,234.55, so buy 1.
+    #    Without the cents, 10% of $12,345 is $1,234.50, which is under one share, so it would be 0.
+    # B: 10% is $1,234.567 / $10 = 123.46, so sell 123 (the cents do not change this one).
+    assert rebalance("12345.67", stocks) == {"A": 1, "B": -123}
 
 
 # ---- ending up on target (the yellow question in the assessment) -------------
