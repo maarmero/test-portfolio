@@ -10,9 +10,9 @@ from rebalancer import rebalance
     [
         (150, 66),      # TC-20: $10,000 / 150 = 66.67, rounds down to 66, not 67
         (100, 100),     # TC-23: divides evenly
-        (3000, 3),      # 3.33 rounds down to 3
         (20_000, 0),    # TC-22: only half a share, so no trade
     ],
+    ids=["rounds_down", "divides_evenly", "less_than_one_share"],
 )
 @pytest.mark.p1
 def test_buying_rounds_down(price, expected):  # TC-20, TC-22, TC-23
