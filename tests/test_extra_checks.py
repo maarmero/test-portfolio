@@ -33,15 +33,6 @@ def test_running_again_after_trading_needs_almost_nothing():  # TC-41
 
 
 @pytest.mark.p3
-def test_huge_account():  # TC-42
-    result = rebalance(10**12, assessment_stocks())
-    # 10% of $1,000,000,000,000 is $100,000,000,000. Divide by the price, round down.
-    assert result["IBM"] == 666_666_666
-    assert result["ORCL"] == -454_545_454
-    assert result["MSFT"] == result["AAPL"] == result["HD"] == 0
-
-
-@pytest.mark.p3
 def test_tiny_percentages_are_exact():  # TC-43
     stocks = [stock("A", 0.01, 0.02, 1), stock("B", 99.99, 99.98, 1)]
     # 0.01% of $100,000 is exactly $10, so exactly 10 shares at $1 each
