@@ -89,14 +89,14 @@ for the stocks and a results column called "Number of shares to buy/sell".
 | TC-50 | Results are easy to read | P2 | Run TC-01 on the screen | You can tell buys from sells (a plus or minus sign, or the words Buy and Sell); a result of 0 shows as 0 or "—", not an empty box |
 | TC-51 | Numbers look right | P2 | Use an account of $1,000,000 and prices with cents | Large numbers have separators ($1,000,000), prices show 2 decimals, shares show as whole numbers |
 | TC-52 | Error shown on the screen | P1 | Enter Target % values that add up to 105 | An error appears next to the problem, the app does not calculate, and the numbers you typed stay in place |
-| TC-53 | Required fields | P2 | Leave a price empty and press the button | The empty field is highlighted with a message, and no results are shown |
-| TC-54 | Odd typing | P2 | Type "abc", "1e3", "-5" and "1,5" into number fields | Each is accepted or rejected the same way every time, and no crash or "NaN" shows |
+| TC-53 | Required fields | P2 | Leave a price empty and press the 'calculate' button | The empty field is highlighted with a message, and no results are shown |
+| TC-54 | Odd typing | P2 | Type "abc", "1e3", "-5" and "1,5" into number fields | Each one is rejected the same way every time, and no crash or "NaN" shows |
 | TC-55 | Change and run again | P1 | Run TC-01, change IBM's Current % to 20, then run again | Results update and nothing from the first run is left over |
 | TC-56 | Add and delete a row | P2 | Add a sixth stock, then delete one | The results update, and the deleted stock no longer appears |
-| TC-57 | Clear the form | P3 | Press Reset after a run | Inputs and results are cleared, or go back to the starting values |
+| TC-57 | Clear the form | P3 | Press Reset after a run | Inputs and results are cleared |
 | TC-58 | Use the keyboard only | P3 | Do TC-01 with Tab and Enter, no mouse | Tab moves in a sensible order, Enter runs the calculation, and you can see which field is selected |
 | TC-59 | Small screens | P3 | Open the page on a computer and on a phone-sized window | Everything stays readable and the results column is not cut off |
-| TC-60 | Double click | P3 | Click the button twice quickly | One correct result, no repeated rows |
+| TC-60 | Double click | P3 | Click the 'calculate' button twice quickly | One correct result, no repeated rows |
 
 ## F. Questions to ask the product owner
 
