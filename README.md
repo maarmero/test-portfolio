@@ -35,6 +35,19 @@ pytest -v
 
 On Windows cmd, use `.venv\Scripts\activate.bat` instead of the activate line.
 
+### Running a subset
+
+Every test is tagged with the priority from `TEST_PLAN.md` (`p1`, `p2` or `p3`). If one test
+covers several plan rows, it takes the highest priority of those rows.
+
+```bash
+pytest -m p1             # the must-pass checks only (a quick smoke run)
+pytest -m "p2 or p3"     # everything else
+```
+
+`tests/test_plan_matches_tests.py` fails if a tag and the plan disagree, or if the plan names
+a test that does not exist, so the two cannot drift apart without being noticed.
+
 ## The logic
 
 For each stock:

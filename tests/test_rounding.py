@@ -16,18 +16,21 @@ from rebalancer import rebalance
         (20_000, 0),    # TC-22: only half a share, so no trade
     ],
 )
+@pytest.mark.p1
 def test_buying_rounds_down(price, expected):  # TC-20, TC-22, TC-23
     # A needs $10,000 more. B is only there to make the percentages add up to 100.
     stocks = [stock("A", 20, 10, price), stock("B", 80, 90, 1)]
     assert rebalance(100_000, stocks)["A"] == expected
 
 
+@pytest.mark.p1
 def test_selling_rounds_down_towards_zero():  # TC-21
     # A has $10,000 too much. 66.67 becomes -66, not -67.
     stocks = [stock("A", 10, 20, 150), stock("B", 90, 80, 1)]
     assert rebalance(100_000, stocks)["A"] == -66
 
 
+@pytest.mark.p1
 def test_never_trade_more_than_needed():  # TC-24
     for symbol, shares in rebalance(100_000, assessment_stocks()).items():
         s = next(x for x in assessment_stocks() if x.symbol == symbol)
