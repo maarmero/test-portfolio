@@ -8,14 +8,14 @@ from rebalancer import rebalance
 
 
 @pytest.mark.p2
-def test_order_of_rows_does_not_matter():  # TC-40
+def test_order_of_rows_does_not_matter():  # TC-30
     normal_order = rebalance(100_000, assessment_stocks())
     reversed_order = rebalance(100_000, list(reversed(assessment_stocks())))
     assert normal_order == reversed_order
 
 
 @pytest.mark.p2
-def test_second_run_after_trading_is_within_one_share():  # TC-41
+def test_second_run_after_trading_is_within_one_share():  # TC-31
     stocks = assessment_stocks()
     trades = rebalance(100_000, stocks)
 
@@ -33,14 +33,14 @@ def test_second_run_after_trading_is_within_one_share():  # TC-41
 
 
 @pytest.mark.p3
-def test_tiny_percentages_are_exact():  # TC-43
+def test_tiny_percentages_are_exact():  # TC-33
     stocks = [stock("A", 0.01, 0.02, 1), stock("B", 99.99, 99.98, 1)]
     # 0.01% of $100,000 is exactly $10, so exactly 10 shares at $1 each
     assert rebalance(100_000, stocks) == {"A": -10, "B": 10}
 
 
 @pytest.mark.p3
-def test_decimal_inputs_are_used_exactly():  # TC-43
+def test_decimal_inputs_are_used_exactly():  # TC-33
     stocks = [stock("A", "33.33", "33.30", "10.50"), stock("B", "66.67", "66.70", "20.25")]
     # A needs 0.03% = $30 more: 30 / 10.50 = 2.86, so buy 2.  B has $30 too much: 30 / 20.25 = 1.48, so sell 1.
     # With the decimals cut off, A would be 3 (30 / 10), so this checks the decimals are used.
