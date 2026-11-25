@@ -51,7 +51,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 |----|-------|-----|------------|--------------------|-----|
 | TC-15 | Buying: round down | P1 | A: target 20, current 10, price 150 (needs $10,000 more, which is 66.67 shares). B (filler): target 80, current 90, price 1 | A +66, not 67 | `test_buying_rounds_down` |
 | TC-16 | Selling: round down | P1 | A: target 10, current 20, price 150 (needs $10,000 less, which is 66.67 shares). B (filler): target 90, current 80, price 1 | A −66, not −67 | `test_selling_rounds_down_towards_zero` |
-| TC-17 | Less than one share | P1 | A: target 20, current 10, price 20,000 (needs $10,000 more, which is 0.5 of a share). B (filler): target 80, current 90, price 1 | A 0 shares | `test_buying_rounds_down` |
+| TC-17 | Less than one share | P1 | A: target 20, current 10, price 20,000 (needs $10,000 more, which is 0.5 of a share). B (filler): target 80, current 90, price 1. Then repeat as a sell: A target 10, current 20, B target 90, current 80 | A 0 shares both times | `test_buying_rounds_down`, `test_selling_rounds_down_towards_zero` |
 | TC-18 | Divides evenly | P2 | A: target 20, current 10, price 100 (needs $10,000 more, which is exactly 100 shares). B (filler): target 80, current 90, price 1 | A +100 | `test_buying_rounds_down` |
 | TC-19 | Never trade too much | P1 | Run any example above, or TC-01 | For every stock, the money value of the shares traded (shares × price) is never more than the money value needed | `test_trades_never_overshoot_and_end_close_to_target` |
 

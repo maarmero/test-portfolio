@@ -21,8 +21,16 @@ def test_buying_rounds_down(price, expected):  # TC-05, TC-15, TC-17, TC-18
     assert rebalance(100_000, stocks)["A"] == expected
 
 
+@pytest.mark.parametrize(
+    "price, expected",
+    [
+        (150, -66),     # TC-16: $10,000 / 150 = 66.67, rounds towards zero to -66, not -67
+        (20_000, 0),    # TC-17: only half a share, so no trade
+    ],
+    ids=["rounds_down", "less_than_one_share"],
+)
 @pytest.mark.p1
-def test_selling_rounds_down_towards_zero():  # TC-05, TC-16
-    # A has $10,000 too much. 66.67 becomes -66, not -67.
-    stocks = [stock("A", 10, 20, 150), stock("B", 90, 80, 1)]
-    assert rebalance(100_000, stocks)["A"] == -66
+def test_selling_rounds_down_towards_zero(price, expected):  # TC-05, TC-16, TC-17
+    # A has $10,000 too much. B is only there to make the percentages add up to 100.
+    stocks = [stock("A", 10, 20, price), stock("B", 90, 80, 1)]
+    assert rebalance(100_000, stocks)["A"] == expected
