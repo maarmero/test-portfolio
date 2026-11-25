@@ -3,33 +3,35 @@ from decimal import Decimal
 
 import pytest
 
-from helpers import assessment_stocks, stock
+from helpers import PORTFOLIOS, assessment_stocks, stock
 from rebalancer import rebalance
 
 
+@pytest.mark.parametrize("stocks", PORTFOLIOS.values(), ids=PORTFOLIOS.keys())
 @pytest.mark.p2
-def test_order_of_rows_does_not_matter():  # TC-30
-    normal_order = rebalance(100_000, assessment_stocks())
-    reversed_order = rebalance(100_000, list(reversed(assessment_stocks())))
-    assert normal_order == reversed_order
+def test_order_of_rows_does_not_matter(stocks):  # TC-30
+    assert rebalance(100_000, stocks) == rebalance(100_000, list(reversed(stocks)))
 
 
 @pytest.mark.p2
-def test_second_run_after_trading_is_within_one_share():  # TC-31
+def test_second_run_after_trading_needs_no_more_trades():  # TC-31
+    account_value = 100_000
     stocks = assessment_stocks()
-    trades = rebalance(100_000, stocks)
+    trades = rebalance(account_value, stocks)
 
-    # Work out each stock's new Current % after doing the trades.
-    new_current = {
-        s.symbol: (Decimal(s.current_pct) / 100 * 100_000 + trades[s.symbol] * s.price) / 1000
+    # Do the trades: each stock's new Current % is the money it holds now, as a % of the account.
+    # Money spent equals money received for this example (TC-02), so the new Current % still adds up to 100.
+    after_trading = [
+        stock(
+            s.symbol,
+            s.target_pct,
+            (Decimal(s.current_pct) / 100 * account_value + trades[s.symbol] * s.price) / account_value * 100,
+            s.price,
+        )
         for s in stocks
-    }
-    # A little money is left over from rounding, so scale the Current % back up to add to 100.
-    scale = 100 / sum(new_current.values())
-    after_trading = [stock(s.symbol, s.target_pct, new_current[s.symbol] * scale, s.price) for s in stocks]
+    ]
 
-    second_run = rebalance(100_000, after_trading)
-    assert all(abs(shares) <= 1 for shares in second_run.values())
+    assert set(rebalance(account_value, after_trading).values()) == {0}
 
 
 @pytest.mark.p3

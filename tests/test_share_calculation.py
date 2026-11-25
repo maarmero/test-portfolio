@@ -4,6 +4,8 @@ from decimal import Decimal
 import pytest
 
 from helpers import (
+    PORTFOLIOS,
+    SEVERAL_BUYS_AND_SELLS,
     assessment_stocks,
     dollars_off_target_after_trades,
     money_needed,
@@ -36,14 +38,6 @@ def test_part_shares_are_kept_to_four_decimals():  # TC-03
 
 
 # ---- total bought and total sold ---------------------------------------------
-
-SEVERAL_BUYS_AND_SELLS = [
-    stock("A", 40, 30, 100),  # need $10,000 more: 10,000 / 100 = buy 100
-    stock("B", 30, 20, 50),   # need $10,000 more: 10,000 / 50  = buy 200
-    stock("C", 10, 25, 200),  # have $15,000 too much: 15,000 / 200 = sell 75
-    stock("D", 20, 25, 100),  # have $5,000 too much: 5,000 / 100 = sell 50
-]
-
 
 @pytest.mark.p1
 def test_totals_with_several_buys_and_sells():  # TC-12 (b)
@@ -101,15 +95,6 @@ def test_account_value_with_cents():  # TC-10
 
 
 # ---- ending up on target (the assessment asks: what gets every stock to zero variance?) ----
-
-PORTFOLIOS = {
-    "assessment example": assessment_stocks(),
-    "several buys and sells": SEVERAL_BUYS_AND_SELLS,
-    "one buy at an uneven price": [stock("A", 20, 10, 150), stock("B", 80, 90, 1)],
-    "swap everything": [stock("A", 0, 100, 100), stock("B", 100, 0, 50)],
-    "odd prices": [stock("A", 33, 20, 7), stock("B", 33, 50, 13), stock("C", 34, 30, 29)],
-}
-
 
 @pytest.mark.parametrize("stocks", PORTFOLIOS.values(), ids=PORTFOLIOS.keys())
 @pytest.mark.p1

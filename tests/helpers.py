@@ -53,3 +53,20 @@ def dollars_off_target_after_trades(stocks, trades, account_value):
         s.symbol: trades[s.symbol] * Decimal(str(s.price)) - money_needed(s, account_value)
         for s in stocks
     }
+
+
+# Sets of stocks shared by the tests. Tests only read them, they never change them.
+SEVERAL_BUYS_AND_SELLS = [
+    stock("A", 40, 30, 100),  # need $10,000 more: 10,000 / 100 = buy 100
+    stock("B", 30, 20, 50),   # need $10,000 more: 10,000 / 50  = buy 200
+    stock("C", 10, 25, 200),  # have $15,000 too much: 15,000 / 200 = sell 75
+    stock("D", 20, 25, 100),  # have $5,000 too much: 5,000 / 100 = sell 50
+]
+
+PORTFOLIOS = {
+    "assessment example": assessment_stocks(),
+    "several buys and sells": SEVERAL_BUYS_AND_SELLS,
+    "one buy at an uneven price": [stock("A", 20, 10, 150), stock("B", 80, 90, 1)],
+    "swap everything": [stock("A", 0, 100, 100), stock("B", 100, 0, 50)],
+    "odd prices": [stock("A", 33, 20, 7), stock("B", 33, 50, 13), stock("C", 34, 30, 29)],
+}

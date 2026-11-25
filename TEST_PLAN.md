@@ -74,10 +74,10 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 
 | ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
-| TC-30 | Order of rows | P2 | Run TC-01, then enter the same stocks in a different order | Each stock gets the same result as before | `test_order_of_rows_does_not_matter` |
-| TC-31 | Run it twice | P2 | Do the TC-01 trades, update the Current % to match, then run again | Each stock is at most 1 share away from done | `test_second_run_after_trading_is_within_one_share` |
+| TC-30 | Order of rows | P2 | Run TC-01, then enter the same stocks in reverse order. Repeat with the four stocks in TC-12 (b), where every stock trades | Each stock gets the same result as before | `test_order_of_rows_does_not_matter` |
+| TC-31 | Run it twice | P2 | Do the TC-01 trades, update the Current % to match, then run again | Every stock needs 0 more shares (after the first run each is already less than one share from its Target %) | `test_second_run_after_trading_needs_no_more_trades` |
 | TC-32 | Huge account | P3 | Account worth $1,000,000,000,000 | Correct results, no strange numbers | `test_large_account_values` |
-| TC-33 | Tiny percentages | P3 | Percentages with decimals, such as 0.01 | Correct results, no small rounding errors | `test_tiny_percentages_are_exact`, `test_decimal_inputs_are_used_exactly` |
+| TC-33 | Tiny percentages | P3 | Percentages and prices with decimals, such as 0.01% and $10.50 | Correct results, no small rounding errors | `test_tiny_percentages_are_exact`, `test_decimal_inputs_are_used_exactly` |
 
 ## E. Screen checks (only if the app had a screen)
 
