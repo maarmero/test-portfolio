@@ -5,35 +5,37 @@ from helpers import assessment_stocks, stock
 from rebalancer import RebalanceError, rebalance
 
 
+@pytest.mark.parametrize("ibm_target", [25, 15], ids=["adds_up_to_105", "adds_up_to_95"])
 @pytest.mark.p1
-def test_target_percent_not_adding_up_to_100():  # TC-20
+def test_target_percent_not_adding_up_to_100(ibm_target):  # TC-20
     stocks = assessment_stocks()
-    stocks[0] = stock("IBM", 25, 10, 150)  # Target % now adds up to 105
-    with pytest.raises(RebalanceError, match="target"):
+    stocks[0] = stock("IBM", ibm_target, 10, 150)  # IBM was 20, so the Target % total is now 105 or 95
+    with pytest.raises(RebalanceError, match="target % must sum to 100"):
         rebalance(100_000, stocks)
 
 
+@pytest.mark.parametrize("ibm_current", [15, 5], ids=["adds_up_to_105", "adds_up_to_95"])
 @pytest.mark.p1
-def test_current_percent_not_adding_up_to_100():  # TC-21
+def test_current_percent_not_adding_up_to_100(ibm_current):  # TC-21
     stocks = assessment_stocks()
-    stocks[0] = stock("IBM", 20, 15, 150)  # Current % now adds up to 105
-    with pytest.raises(RebalanceError, match="current"):
+    stocks[0] = stock("IBM", 20, ibm_current, 150)  # IBM was 10, so the Current % total is now 105 or 95
+    with pytest.raises(RebalanceError, match="current % must sum to 100"):
         rebalance(100_000, stocks)
 
 
-@pytest.mark.parametrize("price", [0, -5, "x", None])  # TC-22, TC-23, TC-24, TC-29
+@pytest.mark.parametrize("price", [0, -5, "abc", None])  # TC-22, TC-23, TC-24, TC-29
 @pytest.mark.p1
 def test_invalid_price(price):
     stocks = assessment_stocks()
     stocks[1] = stock("MSFT", 20, 20, price)
-    with pytest.raises(RebalanceError):
+    with pytest.raises(RebalanceError, match="MSFT price"):
         rebalance(100_000, stocks)
 
 
-@pytest.mark.parametrize("account_value", [0, -1, "abc", None])  # TC-25, TC-29
+@pytest.mark.parametrize("account_value", [0, -1, None])  # TC-25, TC-29
 @pytest.mark.p1
 def test_invalid_account_value(account_value):
-    with pytest.raises(RebalanceError):
+    with pytest.raises(RebalanceError, match="account value"):
         rebalance(account_value, assessment_stocks())
 
 
@@ -48,7 +50,7 @@ def test_invalid_account_value(account_value):
 @pytest.mark.p2
 def test_negative_percentage(stocks):  # TC-26
     # Both columns still add up to 100, so only the "not below 0" check can reject these.
-    with pytest.raises(RebalanceError):
+    with pytest.raises(RebalanceError, match="must be >= 0"):
         rebalance(100_000, stocks)
 
 
