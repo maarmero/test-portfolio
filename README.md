@@ -14,7 +14,7 @@ Manual and automated cases to test rebalancing a portfolio
 
 ## Run
 
-Requires Python 3.9+.
+Requires Python 3.12 or newer (the tests run on 3.12 in CI).
 
 macOS / Linux:
 
@@ -111,6 +111,6 @@ Both cases are tested.
 4. **Then input validation.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
 5. **Automate what repeats.** Share calculation, rounding and input validation checks are added onto the automated suite which runs on every PR merge.
 
-**How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and input validation. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
+**How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and input validation. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs no more trades.
 
 **Not covered here:** fees, taxes, minimum trade sizes, real market prices, and how the numbers get into the app (a file, an API or a screen).
