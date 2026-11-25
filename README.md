@@ -99,9 +99,9 @@ Both cases are tested.
 ## Manual vs automated
 
 - **Test plan** (`TEST_PLAN.md`) includes the cases, whether they are automated or not as well as questions for the PO.
-- The **Automated tests** are located in(`tests/`)
-- The strictly **Manual test cases** are the screen checks (section E, because the assessment has no UI). Every calculation, rounding, bad-input and extra check (sections A to D) has an automated test.
-- Most calculations, rounding and bad-input cases exist in both manual and automated cases on purpose. In a real project the manual run would be a one-off and the automated tests would become part of CI/CD (see how I also added GitHub Actions workflow to run the tests)
+- The **Automated tests** are located in `tests/`
+- The strictly **Manual test cases** are the screen checks (section E, because the assessment has no UI). Every share calculation, rounding, input validation and robustness check (sections A to D) has an automated test.
+- Most share calculation, rounding and input validation cases exist in both manual and automated cases on purpose. In a real project the manual run would be a one-off and the automated tests would become part of CI/CD (see how I also added GitHub Actions workflow to run the tests)
 
 ## How I would test the real application
 
@@ -109,7 +109,7 @@ Both cases are tested.
 2. **Check the main answer first.** The assessment example (buy 66 IBM, sell 45 ORCL), then the buy / sell / nothing-to-do cases. If these are wrong, nothing else matters.
 3. **Then the risky areas.** Rounding (the number is almost never whole), money in versus money out, and very large or very small values.
 4. **Then input validation.** Percentages that do not add up to 100, a price of 0, empty fields, the same stock twice. The app should stop with a clear message, not give a wrong answer.
-5. **Automate what repeats.** Calculation, rounding and bad-input checks are added onto the automated suite which runs on every PR merge.
+5. **Automate what repeats.** Share calculation, rounding and input validation checks are added onto the automated suite which runs on every PR merge.
 
 **How the tests here were chosen.** The expected answers were worked out by hand from the formula, not by running the code, so a mistake in the code can be caught. The cases cover the assessment example, buy / sell / do nothing, edge cases (less than one share, dividing evenly, a target of 0% or 100%), rounding, and input validation. A few sanity checks sit on top: money in equals money out, never trading more than needed, row order does not matter, and running again after trading needs almost nothing.
 
