@@ -10,6 +10,8 @@ from rebalancer import rebalance
 @pytest.mark.parametrize("stocks", PORTFOLIOS.values(), ids=PORTFOLIOS.keys())
 @pytest.mark.p2
 def test_order_of_rows_does_not_matter(stocks):  # TC-29
+    # Runs on every shared portfolio, including ones where every stock trades,
+    # so a result that depends on a stock's position would show up.
     assert rebalance(100_000, stocks) == rebalance(100_000, list(reversed(stocks)))
 
 
@@ -31,13 +33,16 @@ def test_second_run_after_trading_needs_no_more_trades():  # TC-30
         for s in stocks
     ]
 
+    # After the first run every stock is already less than one share from its Target %,
+    # so no more whole shares are needed.
     assert set(rebalance(account_value, after_trading).values()) == {0}
 
 
 @pytest.mark.p3
 def test_tiny_percentages_are_exact():  # TC-32
     stocks = [stock("A", 0.01, 0.02, 1), stock("B", 99.99, 99.98, 1)]
-    # 0.01% of $100,000 is exactly $10, so exactly 10 shares at $1 each
+    # 0.01% of $100,000 is exactly $10, so exactly 10 shares at $1 each.
+    # The values are floats on purpose, to check they are converted exactly.
     assert rebalance(100_000, stocks) == {"A": -10, "B": 10}
 
 
@@ -45,5 +50,6 @@ def test_tiny_percentages_are_exact():  # TC-32
 def test_decimal_inputs_are_used_exactly():  # TC-32
     stocks = [stock("A", "33.33", "33.30", "10.50"), stock("B", "66.67", "66.70", "20.25")]
     # A needs 0.03% = $30 more: 30 / 10.50 = 2.86, so buy 2.  B has $30 too much: 30 / 20.25 = 1.48, so sell 1.
-    # With the decimals cut off, A would be 3 (30 / 10), so this checks the decimals are used.
+    # If the price were rounded to $10, A would be 3 (30 / 10). If the percentages were cut to whole numbers,
+    # they would no longer add up to 100 and the app would reject them.
     assert rebalance(100_000, stocks) == {"A": 2, "B": -1}
