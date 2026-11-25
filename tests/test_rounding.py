@@ -6,31 +6,25 @@ from rebalancer import rebalance
 
 
 @pytest.mark.parametrize(
-    "price, expected",
+    "target, current, price, expected",
     [
-        (150, 66),      # TC-14: $10,000 / 150 = 66.67, rounds down to 66, not 67
-        (100, 100),     # TC-17: divides evenly
-        (20_000, 0),    # TC-16: only half a share, so no trade
+        (20, 10, 150, 66),         # TC-14: buy. $10,000 / 150 = 66.67, rounds down to 66, not 67
+        (20, 10, 100, 100),        # TC-17: buy. Divides evenly
+        (20, 10, 20_000, 0),       # TC-16: buy. Only half a share, so no trade
+        (10, 20, 150, -66),        # TC-15: sell. -66.67 rounds towards zero to -66, not -67
+        (10, 20, 20_000, 0),       # TC-16: sell. Only half a share, so no trade
     ],
-    ids=["rounds_down", "divides_evenly", "less_than_one_share"],
+    ids=[
+        "buy_rounds_down",
+        "buy_divides_evenly",
+        "buy_less_than_one_share",
+        "sell_rounds_towards_zero",
+        "sell_less_than_one_share",
+    ],
 )
 @pytest.mark.p1
-def test_buying_rounds_down(price, expected):  # TC-05, TC-14, TC-16, TC-17
-    # A needs $10,000 more. B is only there to make the percentages add up to 100.
-    stocks = [stock("A", 20, 10, price), stock("B", 80, 90, 1)]
-    assert rebalance(100_000, stocks)["A"] == expected
-
-
-@pytest.mark.parametrize(
-    "price, expected",
-    [
-        (150, -66),     # TC-15: $10,000 / 150 = 66.67, rounds towards zero to -66, not -67
-        (20_000, 0),    # TC-16: only half a share, so no trade
-    ],
-    ids=["rounds_down", "less_than_one_share"],
-)
-@pytest.mark.p1
-def test_selling_rounds_down_towards_zero(price, expected):  # TC-05, TC-15, TC-16
-    # A has $10,000 too much. B is only there to make the percentages add up to 100.
-    stocks = [stock("A", 10, 20, price), stock("B", 90, 80, 1)]
+def test_whole_shares_round_towards_zero(target, current, price, expected):  # TC-05, TC-14, TC-15, TC-16, TC-17
+    # A needs $10,000 more (buy) or has $10,000 too much (sell).
+    # B is only there to make both columns add up to 100.
+    stocks = [stock("A", target, current, price), stock("B", 100 - target, 100 - current, 1)]
     assert rebalance(100_000, stocks)["A"] == expected

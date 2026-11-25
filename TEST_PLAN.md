@@ -30,7 +30,7 @@ because the assessment has no screen.
 | TC-02 | Money in equals money out | P1 | Take the TC-01 result and work out the money: shares bought × price, and shares sold × price | 66 × 150 = $9,900 spent on IBM; 45 × 220 = $9,900 received from ORCL; difference $0 | `test_reference_example_result` |
 | TC-03 | Part shares allowed | P2 | Run TC-01 with whole shares turned off | IBM +66.6667, ORCL −45.4545, the rest 0 | `test_part_shares_are_kept_to_four_decimals` |
 | TC-04 | Nothing to change | P1 | Every stock has Current % equal to Target % | Every result is 0 | `test_nothing_to_change_gives_all_zeros` |
-| TC-05 | Buy or sell direction | P1 | Use one stock with Current % lower than Target %, and one with Current % higher | Current lower than Target gives a buy (+), Current higher than Target gives a sell (−) | `test_buying_rounds_down`, `test_selling_rounds_down_towards_zero`, `test_nothing_to_change_gives_all_zeros` |
+| TC-05 | Buy or sell direction | P1 | Use one stock with Current % lower than Target %, and one with Current % higher | Current lower than Target gives a buy (+), Current higher than Target gives a sell (−) | `test_whole_shares_round_towards_zero`, `test_nothing_to_change_gives_all_zeros` |
 | TC-06 | Only one stock | P3 | One stock, target 100, current 100 | 0 shares | `test_nothing_to_change_gives_all_zeros` |
 | TC-07 | Swap everything | P2 | A: target 0, current 100, price 100. B: target 100, current 0, price 50 | A −1000, B +2000 | `test_swap_everything_between_two_stocks` |
 | TC-08 | Bigger account | P2 | Run TC-01 with an account worth $1,000,000 | IBM +666, ORCL −454 | `test_large_account_values` |
@@ -47,10 +47,10 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 
 | ID | Title | Pri | Steps | Expected Result | Automated? |
 |----|-------|-----|------------|--------------------|-----|
-| TC-14 | Buying: round down | P1 | A: target 20, current 10, price 150 (needs $10,000 more, which is 66.67 shares). B (filler): target 80, current 90, price 1 | A +66, not 67 | `test_buying_rounds_down` |
-| TC-15 | Selling: round down | P1 | A: target 10, current 20, price 150 (needs $10,000 less, which is 66.67 shares). B (filler): target 90, current 80, price 1 | A −66, not −67 | `test_selling_rounds_down_towards_zero` |
-| TC-16 | Less than one share | P1 | A: target 20, current 10, price 20,000 (needs $10,000 more, which is 0.5 of a share). B (filler): target 80, current 90, price 1. Then repeat as a sell: A target 10, current 20, B target 90, current 80 | A 0 shares both times | `test_buying_rounds_down`, `test_selling_rounds_down_towards_zero` |
-| TC-17 | Divides evenly | P2 | A: target 20, current 10, price 100 (needs $10,000 more, which is exactly 100 shares). B (filler): target 80, current 90, price 1 | A +100 | `test_buying_rounds_down` |
+| TC-14 | Buying: round down | P1 | A: target 20, current 10, price 150 (needs $10,000 more, which is 66.67 shares). B (filler): target 80, current 90, price 1 | A +66, not 67 | `test_whole_shares_round_towards_zero` |
+| TC-15 | Selling: round down | P1 | A: target 10, current 20, price 150 (needs $10,000 less, which is 66.67 shares). B (filler): target 90, current 80, price 1 | A −66, not −67 | `test_whole_shares_round_towards_zero` |
+| TC-16 | Less than one share | P1 | A: target 20, current 10, price 20,000 (needs $10,000 more, which is 0.5 of a share). B (filler): target 80, current 90, price 1. Then repeat as a sell: A target 10, current 20, B target 90, current 80 | A 0 shares both times | `test_whole_shares_round_towards_zero` |
+| TC-17 | Divides evenly | P2 | A: target 20, current 10, price 100 (needs $10,000 more, which is exactly 100 shares). B (filler): target 80, current 90, price 1 | A +100 | `test_whole_shares_round_towards_zero` |
 | TC-18 | Never trade too much | P1 | Run any example above, or TC-01 | For every stock, the money value of the shares traded (shares × price) is never more than the money value needed | `test_trades_never_overshoot_and_end_close_to_target` |
 
 ## C. Input validation (the app rejects invalid input)
