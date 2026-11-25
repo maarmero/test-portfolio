@@ -1,7 +1,7 @@
 """Section C of TEST_PLAN.md: input validation. The app must reject invalid input with an error."""
 import pytest
 
-from helpers import assessment_stocks, stock
+from helpers import stock
 from rebalancer import RebalanceError, rebalance
 
 
@@ -33,7 +33,7 @@ def test_invalid_price(price):
 @pytest.mark.p1
 def test_invalid_account_value(account_value):
     with pytest.raises(RebalanceError, match="account value"):
-        rebalance(account_value, assessment_stocks())
+        rebalance(account_value, [stock("A", 50, 50, 10), stock("B", 50, 50, 10)])
 
 
 @pytest.mark.parametrize(
