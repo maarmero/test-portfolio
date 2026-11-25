@@ -5,20 +5,18 @@ from helpers import assessment_stocks, stock
 from rebalancer import RebalanceError, rebalance
 
 
-@pytest.mark.parametrize("ibm_target", [25, 15], ids=["adds_up_to_105", "adds_up_to_95"])
+@pytest.mark.parametrize("total", [105, 95], ids=["adds_up_to_105", "adds_up_to_95"])
 @pytest.mark.p1
-def test_target_percent_not_adding_up_to_100(ibm_target):  # TC-20
-    stocks = assessment_stocks()
-    stocks[0] = stock("IBM", ibm_target, 10, 150)  # IBM was 20, so the Target % total is now 105 or 95
+def test_target_percent_not_adding_up_to_100(total):  # TC-20
+    stocks = [stock("A", total - 50, 50, 10), stock("B", 50, 50, 10)]  # Target % adds up to `total`
     with pytest.raises(RebalanceError, match="target % must sum to 100"):
         rebalance(100_000, stocks)
 
 
-@pytest.mark.parametrize("ibm_current", [15, 5], ids=["adds_up_to_105", "adds_up_to_95"])
+@pytest.mark.parametrize("total", [105, 95], ids=["adds_up_to_105", "adds_up_to_95"])
 @pytest.mark.p1
-def test_current_percent_not_adding_up_to_100(ibm_current):  # TC-21
-    stocks = assessment_stocks()
-    stocks[0] = stock("IBM", 20, ibm_current, 150)  # IBM was 10, so the Current % total is now 105 or 95
+def test_current_percent_not_adding_up_to_100(total):  # TC-21
+    stocks = [stock("A", 50, total - 50, 10), stock("B", 50, 50, 10)]  # Current % adds up to `total`
     with pytest.raises(RebalanceError, match="current % must sum to 100"):
         rebalance(100_000, stocks)
 
@@ -26,9 +24,8 @@ def test_current_percent_not_adding_up_to_100(ibm_current):  # TC-21
 @pytest.mark.parametrize("price", [0, -5, "abc", None])  # TC-22, TC-23, TC-24, TC-29
 @pytest.mark.p1
 def test_invalid_price(price):
-    stocks = assessment_stocks()
-    stocks[1] = stock("MSFT", 20, 20, price)
-    with pytest.raises(RebalanceError, match="MSFT price"):
+    stocks = [stock("A", 50, 50, 10), stock("B", 50, 50, price)]
+    with pytest.raises(RebalanceError, match="B price"):
         rebalance(100_000, stocks)
 
 
@@ -70,9 +67,8 @@ def test_no_stocks():  # TC-28
 @pytest.mark.parametrize("field", ["target_pct", "current_pct"])  # the code's names for Target % and Current %
 @pytest.mark.p2
 def test_empty_percentage_names_the_field(field):  # TC-29
-    values = {"target_pct": 20, "current_pct": 10}
+    values = {"target_pct": 50, "current_pct": 50}
     values[field] = ""
-    stocks = assessment_stocks()
-    stocks[0] = stock("IBM", values["target_pct"], values["current_pct"], 150)
-    with pytest.raises(RebalanceError, match=f"IBM {field}"):
+    stocks = [stock("A", values["target_pct"], values["current_pct"], 10), stock("B", 50, 50, 10)]
+    with pytest.raises(RebalanceError, match=f"A {field}"):
         rebalance(100_000, stocks)

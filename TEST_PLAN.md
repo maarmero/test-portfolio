@@ -61,7 +61,7 @@ Stock B is only a filler to make that work; check the result for stock A. The ac
 |----|-------|-----|------------|--------------------|-----|
 | TC-20 | Target % does not add up | P1 | Target % values add up to 105, then (separately) to 95 | Clear error message, no buy or sell results | `test_target_percent_not_adding_up_to_100` |
 | TC-21 | Current % does not add up | P1 | Current % values add up to 105, then (separately) to 95 | Clear error message, no buy or sell results | `test_current_percent_not_adding_up_to_100` |
-| TC-22 | Price of 0 | P1 | MSFT price is 0 | Error message, the app does not crash | `test_invalid_price` |
+| TC-22 | Price of 0 | P1 | One stock's price is 0 | Error message, the app does not crash | `test_invalid_price` |
 | TC-23 | Negative price | P1 | Price is −5 | Error message | `test_invalid_price` |
 | TC-24 | Price is text | P2 | Price is "abc" | Error message | `test_invalid_price` |
 | TC-25 | Account value of 0 or less | P1 | Account value 0, then −1 | Error message each time | `test_invalid_account_value` |
